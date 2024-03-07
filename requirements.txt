@@ -1,0 +1,4 @@
+hikari==2.0.0.dev122
+hikari-lightbulb==2.3.5
+lavalink_rs==0.11.1
+python-dotenv==1.0.1
