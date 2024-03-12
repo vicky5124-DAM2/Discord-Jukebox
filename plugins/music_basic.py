@@ -133,7 +133,7 @@ async def play(ctx: Context) -> None:
         return None
 
     if not query.startswith("http"):
-        query = f"spsearch:{query}"
+        query = f"ytsearch:{query}"
 
     try:
         loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, query)

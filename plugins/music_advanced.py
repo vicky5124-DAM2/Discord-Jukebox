@@ -17,18 +17,19 @@ async def pause(ctx: Context) -> None:
     """Pause the currently playing song"""
     if not ctx.guild_id:
         return None
-
+    #voice es la conexion al canal de voz
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
         await ctx.respond("Not connected to a voice channel")
         return None
-
+    #isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
 
     player = await voice.player.get_player()
-
+    #este if mira si hay una canción reproduciendose ahora mismo
     if player.track:
+        #este if mira si hay una uri
         if player.track.info.uri:
             await ctx.respond(
                 f"Paused: [`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>)"
@@ -37,7 +38,7 @@ async def pause(ctx: Context) -> None:
             await ctx.respond(
                 f"Paused: `{player.track.info.author} - {player.track.info.title}`"
             )
-
+        #este await pausa la cancion
         await voice.player.set_pause(True)
     else:
         await ctx.respond("Nothing to pause")
