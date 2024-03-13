@@ -17,19 +17,19 @@ async def pause(ctx: Context) -> None:
     """Pause the currently playing song"""
     if not ctx.guild_id:
         return None
-    #voice es la conexion al canal de voz
+    # voice es la conexion al canal de voz
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
         await ctx.respond("Not connected to a voice channel")
         return None
-    #isinstance mira si voice es una instancia de LavalinkVoice
+    # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
 
     player = await voice.player.get_player()
-    #este if mira si hay una canción reproduciendose ahora mismo
+    # este if mira si hay una canción reproduciendose ahora mismo
     if player.track:
-        #este if mira si hay una uri
+        # este if mira si hay una uri
         if player.track.info.uri:
             await ctx.respond(
                 f"Paused: [`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>)"
@@ -38,7 +38,7 @@ async def pause(ctx: Context) -> None:
             await ctx.respond(
                 f"Paused: `{player.track.info.author} - {player.track.info.title}`"
             )
-        #este await pausa la cancion
+        # este await pausa la cancion
         await voice.player.set_pause(True)
     else:
         await ctx.respond("Nothing to pause")
@@ -51,18 +51,19 @@ async def resume(ctx: Context) -> None:
     """Resume the currently playing song"""
     if not ctx.guild_id:
         return None
-
+    # voice es la conexion al canal de voz
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
-
+    # si voice es nulo estonces el bot no está conectado a un canal de voz
     if not voice:
         await ctx.respond("Not connected to a voice channel")
         return None
-
+    # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
-
+    # player es el reproductor de musica que usa el bot cuando se une a un canal de voz
     player = await voice.player.get_player()
-
+    # player.track es la canción que está en el reproductor (el if mira si hay una canción en el reproductor)
     if player.track:
+        # este if mira si la canción tiene un url, si lo tiene saldrá en el mensaje del bot
         if player.track.info.uri:
             await ctx.respond(
                 f"Resumed: [`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>)"
@@ -71,9 +72,10 @@ async def resume(ctx: Context) -> None:
             await ctx.respond(
                 f"Resumed: `{player.track.info.author} - {player.track.info.title}`"
             )
-
+        # el bot continua la canción
         await voice.player.set_pause(False)
     else:
+        # el reproductor no tiene nignuna canción asi que no hay nada que continuar
         await ctx.respond("Nothing to resume")
 
 
@@ -89,18 +91,19 @@ async def seek(ctx: Context) -> None:
     """Seek the currently playing song to a specific second"""
     if not ctx.guild_id:
         return None
-
+    # voice es la conexion al canal de voz
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
-
+    # si voice es nulo estonces el bot no está conectado a un canal de voz
     if not voice:
         await ctx.respond("Not connected to a voice channel")
         return None
-
+    # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
-
+    # player es el reproductor de musica que usa el bot cuando se une a un canal de voz
     player = await voice.player.get_player()
-
+    # player.track es la canción que está en el reproductor (el if mira si hay una canción en el reproductor)
     if player.track:
+        # este if mira si la canción tiene un url, si lo tiene saldrá en el mensaje del bot
         if player.track.info.uri:
             await ctx.respond(
                 f"Seeked: [`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>)"
@@ -109,9 +112,10 @@ async def seek(ctx: Context) -> None:
             await ctx.respond(
                 f"Seeked: `{player.track.info.author} - {player.track.info.title}`"
             )
-
+        # el bot continua la canción en los segundos indicados multiplicados por 1000 (milisegundos)
         await voice.player.set_position_ms(ctx.options.seconds * 1000)
     else:
+        # si no hay ninguna canción en el reproductor pone este mensaje
         await ctx.respond("Nothing to seek")
 
 
@@ -122,9 +126,9 @@ async def queue(ctx: Context) -> None:
     """List the current queue"""
     if not ctx.guild_id:
         return None
-
+    # voice es la conexion al canal de voz
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
-
+    # si voice es nulo estonces el bot no está conectado a un canal de voz
     if not voice:
         await ctx.respond("Not connected to a voice channel")
         return None
@@ -136,10 +140,16 @@ async def queue(ctx: Context) -> None:
     now_playing = "Nothing"
 
     if player.track:
+        # este es el tiempo de la canción en segundos (dentro del minuto)
         time_s = int(player.state.position / 1000 % 60)
+        # este es el tiempo de la canción en minutos
         time_m = int(player.state.position / 1000 / 60)
+        # este es el tiempo de la canción en horas (por si acaso)
+        time_h = int((player.state.position / 1000 / 60) / 60)
+        #este es el tiempo total de la canción en segundos
         time_true_s = int(player.state.position / 1000)
-        time = f"{time_m:02}:{time_s:02}"
+        # el tiempo de la canción (time_h son las horas, time_m son los minutos, y time_s son los segundos)
+        time = f"{time_h:02}:{time_m:02}:{time_s:02}"
 
         if player.track.info.uri:
             now_playing = f"[`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>) | {time} (Second {time_true_s})"
@@ -154,9 +164,9 @@ async def queue(ctx: Context) -> None:
             break
 
         if i.track.info.uri:
-            queue_text += f"{idx+1} -> [`{i.track.info.author} - {i.track.info.title}`](<{i.track.info.uri}>)\n"
+            queue_text += f"{idx + 1} -> [`{i.track.info.author} - {i.track.info.title}`](<{i.track.info.uri}>)\n"
         else:
-            queue_text += f"{idx+1} -> `{i.track.info.author} - {i.track.info.title}`\n"
+            queue_text += f"{idx + 1} -> `{i.track.info.author} - {i.track.info.title}`\n"
 
     if not queue_text:
         queue_text = "Empty queue"
