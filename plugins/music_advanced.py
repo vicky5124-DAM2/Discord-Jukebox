@@ -143,22 +143,25 @@ async def queue(ctx: Context) -> None:
         # este es el tiempo de la canción en segundos (dentro del minuto)
         time_s = int(player.state.position / 1000 % 60)
         # este es el tiempo de la canción en minutos
-        time_m = int(player.state.position / 1000 / 60)
-        # este es el tiempo de la canción en horas (por si acaso)
-        time_h = int((player.state.position / 1000 / 60) / 60)
-        #este es el tiempo total de la canción en segundos
+        time_m = int(player.state.position / 1000 / 60 % 60)
+        # este es el tiempo de la canción en horas (por si la canción dura más de una hora)
+        time_h = int(player.state.position / 1000 / 60 / 60)
+        #este es el tiempo total de la canción en segundos, necessario para `/seek <t>`
         time_true_s = int(player.state.position / 1000)
         # el tiempo de la canción (time_h son las horas, time_m son los minutos, y time_s son los segundos)
-        time = f"{time_h:02}:{time_m:02}:{time_s:02}"
+        if time_h:
+            time = f"{time_h:02}:{time_m:02}:{time_s:02}"
+        else:
+            time = f"{time_m:02}:{time_s:02}"
 
         if player.track.info.uri:
             now_playing = f"[`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>) | {time} (Second {time_true_s})"
         else:
             now_playing = f"`{player.track.info.author} - {player.track.info.title}` | {time} (Second {time_true_s})"
-
+    # queue es la lista de canciones que hay en la cola
     queue = await voice.player.get_queue()
     queue_text = ""
-
+    # enumerate enumera el numero de canciones en la cola y su información, el máximo de canciones en la cola es 10
     for idx, i in enumerate(queue):
         if idx == 9:
             break
