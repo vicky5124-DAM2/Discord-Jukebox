@@ -14,6 +14,7 @@ plugin.add_checks(lightbulb.guild_only)
 
 
 class Events(lavalink_rs.EventHandler):
+    # el evento ready aparece cuando el bot se conecta correctamente a lavalink
     async def ready(
         self,
         client: lavalink_rs.LavalinkClient,
@@ -22,7 +23,7 @@ class Events(lavalink_rs.EventHandler):
     ) -> None:
         del client, session_id, event
         logging.info("HOLY READY")
-
+    # el evento track_start cuando empieza una canción
     async def track_start(
         self,
         client: lavalink_rs.LavalinkClient,

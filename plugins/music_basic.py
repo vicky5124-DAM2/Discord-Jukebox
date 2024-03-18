@@ -17,7 +17,7 @@ async def _join(ctx: Context) -> t.Optional[hikari.Snowflake]:
     if not ctx.guild_id:
         return None
 
-    if "channel" not in ctx.options.items():
+    if not ctx.options.channel:
         voice_state = ctx.bot.cache.get_voice_state(ctx.guild_id, ctx.author.id)
 
         if not voice_state or not voice_state.channel_id:
@@ -258,7 +258,7 @@ async def stop(ctx: Context) -> None:
             await ctx.respond(
                 f"Stopped: `{player.track.info.author} - {player.track.info.title}`"
             )
-
+        # para la canción
         await voice.player.stop_now()
     else:
         await ctx.respond("Nothing to stop")

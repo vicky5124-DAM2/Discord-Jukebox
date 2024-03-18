@@ -199,7 +199,7 @@ async def remove(ctx: Context) -> None:
     assert isinstance(voice, LavalinkVoice)
 
     queue = await voice.player.get_queue()
-
+    # si el indice indicado por el usuario es mayor a la longitud de la cola, saldrá este mensaje
     if ctx.options.index > len(queue):
         await ctx.respond("Index out of range")
         return None
@@ -213,7 +213,7 @@ async def remove(ctx: Context) -> None:
         )
     else:
         await ctx.respond(f"Removed: `{track.info.author} - {track.info.title}`")
-
+    # el indice de la cola se reduce en uno
     voice.player.set_queue_remove(ctx.options.index - 1)
 
 
@@ -238,7 +238,7 @@ async def clear(ctx: Context) -> None:
     if not queue:
         await ctx.respond("The queue is already empty")
         return None
-
+    # da la cola vacia a voice
     voice.player.set_queue_clear()
     await ctx.respond("The queue has been cleared")
 
@@ -270,15 +270,15 @@ async def swap(ctx: Context) -> None:
     assert isinstance(voice, LavalinkVoice)
 
     queue = await voice.player.get_queue()
-
+    # mira si el indice indicado por el usuario es mayor a la longitud de la cola
     if ctx.options.index1 > len(queue):
         await ctx.respond("Index 1 out of range")
         return None
-
+    # mira si el indice indicado por el usuario es mayor a la longitud de la cola
     if ctx.options.index2 > len(queue):
         await ctx.respond("Index 2 out of range")
         return None
-
+    # mira si los dos indices son el mismo
     if ctx.options.index1 == ctx.options.index2:
         await ctx.respond("Can't swap between the same indexes")
         return None
@@ -288,10 +288,10 @@ async def swap(ctx: Context) -> None:
 
     track1 = queue[ctx.options.index1 - 1]
     track2 = queue[ctx.options.index2 - 1]
-
+    # se intercambian los indices de las dos canciones
     queue[ctx.options.index1 - 1] = track2
     queue[ctx.options.index2 - 1] = track1
-
+    # da la cola modificada a voice
     voice.player.set_queue_replace(queue)
 
     if track1.track.info.uri:
@@ -324,9 +324,9 @@ async def shuffle(ctx: Context) -> None:
     assert isinstance(voice, LavalinkVoice)
 
     queue = await voice.player.get_queue()
-
+    # se mezclan los indices de la cola
     random.shuffle(queue)
-
+    # da la cola modificada a voice
     voice.player.set_queue_replace(queue)
 
     await ctx.respond("Shuffled the queue")
