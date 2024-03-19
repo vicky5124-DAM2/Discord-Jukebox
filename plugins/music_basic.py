@@ -16,19 +16,28 @@ plugin.add_checks(lightbulb.guild_only)
 async def _join(ctx: Context) -> t.Optional[hikari.Snowflake]:
     if not ctx.guild_id:
         return None
-
-    if not ctx.options.channel:
+    # channel_id es el id del canal de voz donde se conectará el bot
+    channel_id = None
+    # ctx.options.items son los parametros del comando. El for recorre las distintas opciones.
+    for i in ctx.options.items():
+        # si channel es el nombre del parametro y tiene un valor presente en el comando...
+        if i[0] == "channel" and i[1]:
+            # ... entonces el bot entra en el canal especificado (i[1].id)
+            channel_id = i[1].id
+            break
+    # si no tiene ningún canal especificado en el comando (es solo !join o /join)...
+    if not channel_id:
+        # ...entra en el canal en el que está el usuario que ha escrito el comando
         voice_state = ctx.bot.cache.get_voice_state(ctx.guild_id, ctx.author.id)
-
+        # si el usuario no está conectado a ningún canal
         if not voice_state or not voice_state.channel_id:
             return None
-
+        # channel_id es el canal al que está conectado el usuario
         channel_id = voice_state.channel_id
-    else:
-        channel_id = ctx.options.channel.id
-
+    # miramos si el bot ya está conectado a ese canal
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
-
+    # si no está conectado a ningún canal, entonces se conecta al canal introducido en el comando,
+    # o en el que está el usuario
     if not voice:
         voice = await LavalinkVoice.connect(
             ctx.guild_id,
@@ -72,13 +81,13 @@ async def leave(ctx: Context) -> None:
     """Leaves the voice channel"""
     if not ctx.guild_id:
         return None
-
+    # miramos si el bot está conectado en un canal
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
-
+    # si no está en ningún canal, el bot introducirá un mensaje diciendolo
     if not voice:
         await ctx.respond("Not in a voice channel")
         return None
-
+    # el bot se desconecta del canal
     await voice.disconnect()
 
     await ctx.respond("Left the voice channel")
@@ -117,25 +126,31 @@ async def play(ctx: Context) -> None:
     assert isinstance(voice, LavalinkVoice)
 
     player_ctx = voice.player
+    # hacemos replace de < y > por un " " para evitar que los enlaces sean invalidos
     query = ctx.options.query.replace(">", "").replace("<", "")
-
+    # si no hay argumentos en el comando, sigue la reproducción a partir de la siguiente canción
+    # después de haber usado un /stop
     if not query:
         player = await player_ctx.get_player()
-
+        # si no hay ninguna canción reproduciendose y hay canciones en la cola...
         if not player.track and await player_ctx.get_queue():
+            # el bot hará un /skip para reproducir la siguiente canción
             player_ctx.skip()
         else:
+            # si ya hay una canción, entonces el bot pondrá un mensaje
             if player.track:
                 await ctx.respond("A song is already playing")
+            # y si no hay ninguna canción en la cola, el bot pondrá otro mensaje
             else:
                 await ctx.respond("The queue is empty")
 
         return None
-
+    # si no es una url, el bot buscará el argumento indicado por el usuario en youtube
     if not query.startswith("http"):
         query = f"ytsearch:{query}"
 
     try:
+        # loaded_tracks son los resultados de la busqueda del bot o del url
         loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, query)
     except Exception as e:
         logging.error(e)
@@ -205,17 +220,18 @@ async def skip(ctx: Context) -> None:
     """Skip the currently playing song"""
     if not ctx.guild_id:
         return None
-
+    # miramos si el bot ya está conectado en un canal
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
         await ctx.respond("Not connected to a voice channel")
         return None
-
+    # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
-
+    # player es el reproductor de musica que usa el bot cuando se une a un canal de voz
     player = await voice.player.get_player()
-
+    # si se está reproduciendo una canción el bot introducirá en un mensaje la canción que ha saltado,
+    # con la información de esta
     if player.track:
         if player.track.info.uri:
             await ctx.respond(
@@ -225,8 +241,9 @@ async def skip(ctx: Context) -> None:
             await ctx.respond(
                 f"Skipped: `{player.track.info.author} - {player.track.info.title}`"
             )
-
+        # el bot salta a la siguiente canción en la cola
         voice.player.skip()
+    # si no hay ninguna canción reproduciendose entonces pondrá un mensaje diciendolo
     else:
         await ctx.respond("Nothing to skip")
 
@@ -238,17 +255,18 @@ async def stop(ctx: Context) -> None:
     """Stop the currently playing song"""
     if not ctx.guild_id:
         return None
-
+    # miramos si el bot ya está conectado en un canal
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
         await ctx.respond("Not connected to a voice channel")
         return None
-
+    # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
-
+    # player es el reproductor de musica que usa el bot cuando se une a un canal de voz
     player = await voice.player.get_player()
-
+    # si se está reproduciendo una canción el bot introducirá en un mensaje la canción que ha parado,
+    # con la información de esta
     if player.track:
         if player.track.info.uri:
             await ctx.respond(
