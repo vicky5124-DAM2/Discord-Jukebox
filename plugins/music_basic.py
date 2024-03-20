@@ -126,11 +126,10 @@ async def play(ctx: Context) -> None:
     assert isinstance(voice, LavalinkVoice)
 
     player_ctx = voice.player
-    # hacemos replace de < y > por un " " para evitar que los enlaces sean invalidos
-    query = ctx.options.query.replace(">", "").replace("<", "")
+
     # si no hay argumentos en el comando, sigue la reproducción a partir de la siguiente canción
     # después de haber usado un /stop
-    if not query:
+    if not ctx.options.query:
         player = await player_ctx.get_player()
         # si no hay ninguna canción reproduciendose y hay canciones en la cola...
         if not player.track and await player_ctx.get_queue():
@@ -145,6 +144,10 @@ async def play(ctx: Context) -> None:
                 await ctx.respond("The queue is empty")
 
         return None
+
+    # hacemos replace de < y > por un "" para evitar que los enlaces sean invalidos
+    query = ctx.options.query.replace(">", "").replace("<", "")
+
     # si no es una url, el bot buscará el argumento indicado por el usuario en youtube
     if not query.startswith("http"):
         query = f"ytsearch:{query}"
