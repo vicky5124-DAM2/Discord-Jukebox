@@ -331,6 +331,35 @@ async def shuffle(ctx: Context) -> None:
 
     await ctx.respond("Shuffled the queue")
 
+@plugin.command()
+@lightbulb.option(
+    "start",
+    "Starts the loop"
+)
+@lightbulb.option(
+    "end",
+    "Ends the loop"
+)
+@lightbulb.command("loop", "Loops the current song when it ends")
+@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
+async def loop(ctx:Context) -> None:
+    if not ctx.guild_id:
+        return None
+
+    voice = ctx.bot.voice.connections.get(ctx.guild_id)
+
+    if not voice:
+        await ctx.respond("Not connected to a voice channel")
+        return None
+
+    assert isinstance(voice, LavalinkVoice)
+
+    player = await voice.player.get_player()
+
+    if player.track:
+        if player.state.position == player.track.info.length:
+            
+
 
 def load(bot: GatewayBot) -> None:
     bot.add_plugin(plugin)
