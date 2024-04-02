@@ -13,7 +13,7 @@ from lavalink_rs.model.player import ConnectionInfo
 class LavalinkVoice(VoiceConnection):
     __slots__ = [
         "lavalink",
-        "player",
+        "player_ctx",
         "__channel_id",
         "__guild_id",
         "__session_id",
@@ -23,12 +23,12 @@ class LavalinkVoice(VoiceConnection):
         "__owner",
     ]
     lavalink: LavalinkClient
-    player: PlayerContext
+    player_ctx: PlayerContext
 
     def __init__(
         self,
         lavalink_client: LavalinkClient,
-        player: PlayerContext,
+        player_ctx: PlayerContext,
         *,
         channel_id: hikari.Snowflake,
         guild_id: hikari.Snowflake,
@@ -38,7 +38,7 @@ class LavalinkVoice(VoiceConnection):
         owner: VoiceComponent,
         on_close: t.Any,
     ) -> None:
-        self.player = player
+        self.player_ctx = player_ctx
         self.lavalink = lavalink_client
 
         self.__channel_id = channel_id
@@ -134,18 +134,18 @@ class LavalinkVoice(VoiceConnection):
         del user_id
         lavalink_client = kwargs["lavalink_client"]
 
-        player = await lavalink_client.create_player_context(
+        player_ctx = await lavalink_client.create_player_context(
             guild_id, endpoint, token, session_id
         )
 
         player_data = kwargs["player_data"]
 
         if player_data:
-            player.data = player_data
+            player_ctx.data = player_data
 
         self = LavalinkVoice(
             lavalink_client,
-            player,
+            player_ctx,
             channel_id=channel_id,
             guild_id=guild_id,
             session_id=session_id,

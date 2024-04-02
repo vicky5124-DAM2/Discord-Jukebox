@@ -125,7 +125,7 @@ async def play(ctx: Context) -> None:
 
     assert isinstance(voice, LavalinkVoice)
 
-    player_ctx = voice.player
+    player_ctx = voice.player_ctx
 
     # si no hay argumentos en el comando, sigue la reproducción a partir de la siguiente canción
     # después de haber usado un /stop

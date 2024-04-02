@@ -1,3 +1,5 @@
+from _ast import Call
+
 from lavalink_voice import LavalinkVoice
 
 import random
@@ -26,7 +28,7 @@ async def pause(ctx: Context) -> None:
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
 
-    player = await voice.player.get_player()
+    player = await voice.player_ctx.get_player()
     # este if mira si hay una canción reproduciendose ahora mismo
     if player.track:
         # este if mira si hay una uri
@@ -39,7 +41,7 @@ async def pause(ctx: Context) -> None:
                 f"Paused: `{player.track.info.author} - {player.track.info.title}`"
             )
         # este await pausa la cancion
-        await voice.player.set_pause(True)
+        await voice.player_ctx.set_pause(True)
     else:
         await ctx.respond("Nothing to pause")
 
@@ -60,7 +62,7 @@ async def resume(ctx: Context) -> None:
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
     # player es el reproductor de musica que usa el bot cuando se une a un canal de voz
-    player = await voice.player.get_player()
+    player = await voice.player_ctx.get_player()
     # player.track es la canción que está en el reproductor (el if mira si hay una canción en el reproductor)
     if player.track:
         # este if mira si la canción tiene un url, si lo tiene saldrá en el mensaje del bot
@@ -73,7 +75,7 @@ async def resume(ctx: Context) -> None:
                 f"Resumed: `{player.track.info.author} - {player.track.info.title}`"
             )
         # el bot continua la canción
-        await voice.player.set_pause(False)
+        await voice.player_ctx.set_pause(False)
     else:
         # el reproductor no tiene nignuna canción asi que no hay nada que continuar
         await ctx.respond("Nothing to resume")
@@ -100,7 +102,7 @@ async def seek(ctx: Context) -> None:
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
     # player es el reproductor de musica que usa el bot cuando se une a un canal de voz
-    player = await voice.player.get_player()
+    player = await voice.player_ctx.get_player()
     # player.track es la canción que está en el reproductor (el if mira si hay una canción en el reproductor)
     if player.track:
         # este if mira si la canción tiene un url, si lo tiene saldrá en el mensaje del bot
@@ -113,7 +115,7 @@ async def seek(ctx: Context) -> None:
                 f"Seeked: `{player.track.info.author} - {player.track.info.title}`"
             )
         # el bot continua la canción en los segundos indicados multiplicados por 1000 (milisegundos)
-        await voice.player.set_position_ms(ctx.options.seconds * 1000)
+        await voice.player_ctx.set_position_ms(ctx.options.seconds * 1000)
     else:
         # si no hay ninguna canción en el reproductor pone este mensaje
         await ctx.respond("Nothing to seek")
@@ -135,7 +137,7 @@ async def queue(ctx: Context) -> None:
 
     assert isinstance(voice, LavalinkVoice)
 
-    player = await voice.player.get_player()
+    player = await voice.player_ctx.get_player()
 
     now_playing = "Nothing"
 
@@ -146,7 +148,7 @@ async def queue(ctx: Context) -> None:
         time_m = int(player.state.position / 1000 / 60 % 60)
         # este es el tiempo de la canción en horas (por si la canción dura más de una hora)
         time_h = int(player.state.position / 1000 / 60 / 60)
-        #este es el tiempo total de la canción en segundos, necessario para `/seek <t>`
+        # este es el tiempo total de la canción en segundos, necessario para `/seek <t>`
         time_true_s = int(player.state.position / 1000)
         # el tiempo de la canción (time_h son las horas, time_m son los minutos, y time_s son los segundos)
         if time_h:
@@ -159,7 +161,7 @@ async def queue(ctx: Context) -> None:
         else:
             now_playing = f"`{player.track.info.author} - {player.track.info.title}` | {time} (Second {time_true_s})"
     # queue es la lista de canciones que hay en la cola
-    queue = await voice.player.get_queue()
+    queue = await voice.player_ctx.get_queue()
     queue_text = ""
     # enumerate enumera el numero de canciones en la cola y su información, el máximo de canciones en la cola es 10
     for idx, i in enumerate(queue):
@@ -198,7 +200,7 @@ async def remove(ctx: Context) -> None:
 
     assert isinstance(voice, LavalinkVoice)
 
-    queue = await voice.player.get_queue()
+    queue = await voice.player_ctx.get_queue()
     # si el indice indicado por el usuario es mayor a la longitud de la cola, saldrá este mensaje
     if ctx.options.index > len(queue):
         await ctx.respond("Index out of range")
@@ -214,7 +216,7 @@ async def remove(ctx: Context) -> None:
     else:
         await ctx.respond(f"Removed: `{track.info.author} - {track.info.title}`")
     # el indice de la cola se reduce en uno
-    voice.player.set_queue_remove(ctx.options.index - 1)
+    voice.player_ctx.set_queue_remove(ctx.options.index - 1)
 
 
 @plugin.command()
@@ -233,13 +235,13 @@ async def clear(ctx: Context) -> None:
 
     assert isinstance(voice, LavalinkVoice)
 
-    queue = await voice.player.get_queue()
+    queue = await voice.player_ctx.get_queue()
 
     if not queue:
         await ctx.respond("The queue is already empty")
         return None
     # da la cola vacia a voice
-    voice.player.set_queue_clear()
+    voice.player_ctx.set_queue_clear()
     await ctx.respond("The queue has been cleared")
 
 
@@ -269,7 +271,7 @@ async def swap(ctx: Context) -> None:
 
     assert isinstance(voice, LavalinkVoice)
 
-    queue = await voice.player.get_queue()
+    queue = await voice.player_ctx.get_queue()
     # mira si el indice indicado por el usuario es mayor a la longitud de la cola
     if ctx.options.index1 > len(queue):
         await ctx.respond("Index 1 out of range")
@@ -292,7 +294,7 @@ async def swap(ctx: Context) -> None:
     queue[ctx.options.index1 - 1] = track2
     queue[ctx.options.index2 - 1] = track1
     # da la cola modificada a voice
-    voice.player.set_queue_replace(queue)
+    voice.player_ctx.set_queue_replace(queue)
 
     if track1.track.info.uri:
         track1_text = f"[`{track1.track.info.author} - {track1.track.info.title}`](<{track1.track.info.uri}>)"
@@ -323,26 +325,26 @@ async def shuffle(ctx: Context) -> None:
 
     assert isinstance(voice, LavalinkVoice)
 
-    queue = await voice.player.get_queue()
+    queue = await voice.player_ctx.get_queue()
     # se mezclan los indices de la cola
     random.shuffle(queue)
     # da la cola modificada a voice
-    voice.player.set_queue_replace(queue)
+    voice.player_ctx.set_queue_replace(queue)
 
     await ctx.respond("Shuffled the queue")
 
+
 @plugin.command()
-@lightbulb.option(
-    "start",
-    "Starts the loop"
-)
-@lightbulb.option(
-    "end",
-    "Ends the loop"
-)
 @lightbulb.command("loop", "Loops the current song when it ends")
-@lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
-async def loop(ctx:Context) -> None:
+@lightbulb.implements(lightbulb.PrefixCommandGroup, lightbulb.SlashCommandGroup)
+async def loop(ctx: Context) -> None:
+    return None
+
+
+@loop.child
+@lightbulb.command("start", "Starts the loop", auto_defer=True)
+@lightbulb.implements(lightbulb.PrefixSubCommand, lightbulb.SlashSubCommand)
+async def loop_start(ctx: Context) -> None:
     if not ctx.guild_id:
         return None
 
@@ -354,11 +356,56 @@ async def loop(ctx:Context) -> None:
 
     assert isinstance(voice, LavalinkVoice)
 
-    player = await voice.player.get_player()
+    player = await voice.player_ctx.get_player()
 
     if player.track:
-        if player.state.position == player.track.info.length:
-            
+        voice.player_ctx.set_queue_push_to_front(player.track)
+        if voice.lavalink.data:
+            voice.lavalink.data.append(ctx.guild_id)
+        else:
+            voice.lavalink.data = [ctx.guild_id]
+
+        if player.track.info.uri:
+            await ctx.respond(
+                f"Starting the loop on track: [`{player.track.info.author} - {player.track.info.title}`]"
+                f"(<{player.track.info.uri}>)"
+            )
+        else:
+            await ctx.respond(f"Starting the loop on track: `{player.track.info.author} - {player.track.info.title}`")
+    else:
+        await ctx.respond("Nothing is playing at the moment")
+
+
+@loop.child
+@lightbulb.command("end", "Ends the loop", auto_defer=True)
+@lightbulb.implements(lightbulb.PrefixSubCommand, lightbulb.SlashSubCommand)
+async def loop_end(ctx: Context) -> None:
+    if not ctx.guild_id:
+        return None
+
+    voice = ctx.bot.voice.connections.get(ctx.guild_id)
+
+    if not voice:
+        await ctx.respond("Not connected to a voice channel")
+        return None
+
+    assert isinstance(voice, LavalinkVoice)
+
+    player = await voice.player_ctx.get_player()
+
+    if player.track:
+        voice.player_ctx.set_queue_remove(0)
+        if voice.lavalink.data:
+            voice.lavalink.data.remove(ctx.guild_id)
+        if player.track.info.uri:
+            await ctx.respond(
+                f"Ending the loop on track: [`{player.track.info.author} - {player.track.info.title}`]"
+                f"(<{player.track.info.uri}>)"
+            )
+        else:
+            await ctx.respond(f"Ending the loop on track: `{player.track.info.author} - {player.track.info.title}`")
+    else:
+        await ctx.respond("Nothing is playing at the moment")
 
 
 def load(bot: GatewayBot) -> None:

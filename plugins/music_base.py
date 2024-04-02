@@ -23,6 +23,7 @@ class Events(lavalink_rs.EventHandler):
     ) -> None:
         del client, session_id, event
         logging.info("HOLY READY")
+
     # el evento track_start cuando empieza una canción
     async def track_start(
         self,
@@ -53,6 +54,9 @@ class Events(lavalink_rs.EventHandler):
                 data[0],
                 f"Started playing `{event.track.info.author} - {event.track.info.title}`",
             )
+
+        if client.data and event.guild_id in client.data:
+            player_ctx.set_queue_push_to_front(event.track)
 
 
 @plugin.listener(hikari.ShardReadyEvent, bind=True)
