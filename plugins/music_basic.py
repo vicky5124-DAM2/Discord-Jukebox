@@ -99,11 +99,16 @@ async def leave(ctx: Context) -> None:
     "The spotify search query, or any URL",
     modifier=lightbulb.OptionModifier.CONSUME_REST,
     required=False,
+    name_localizations={hikari.Locale.ES_ES: "busqueda"},
+    description_localizations={hikari.Locale.ES_ES: "La busqueda en spotify, o cualquier URL"}
 )
 @lightbulb.command(
     "play",
     "Searches the query on spotify and adds the first result to the queue, or adds the URL to the queue",
     auto_defer=True,
+    name_localizations={hikari.Locale.ES_ES: "reproducir"},
+    description_localizations={hikari.Locale.ES_ES: "Busca la consulta en Spotify y agrega el primer resultado a la "
+                                                    "cola, o agrega la URL a la cola"}
 )
 @lightbulb.implements(
     lightbulb.PrefixCommand,
@@ -150,7 +155,7 @@ async def play(ctx: Context) -> None:
 
     # si no es una url, el bot buscará el argumento indicado por el usuario en youtube
     if not query.startswith("http"):
-        query = f"ytsearch:{query}"
+        query = f"dzsearch:{query}"
 
     try:
         # loaded_tracks son los resultados de la busqueda del bot o del url

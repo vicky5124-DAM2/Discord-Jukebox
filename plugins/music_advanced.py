@@ -341,6 +341,7 @@ async def loop(ctx: Context) -> None:
     return None
 
 
+# @loop.child hace que /loop start sea un subcomando de loop
 @loop.child
 @lightbulb.command("start", "Starts the loop", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixSubCommand, lightbulb.SlashSubCommand)
@@ -376,6 +377,7 @@ async def loop_start(ctx: Context) -> None:
         await ctx.respond("Nothing is playing at the moment")
 
 
+# @loop.child hace que /loop end sea un subcomando de loop
 @loop.child
 @lightbulb.command("end", "Ends the loop", auto_defer=True)
 @lightbulb.implements(lightbulb.PrefixSubCommand, lightbulb.SlashSubCommand)
