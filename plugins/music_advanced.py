@@ -1,4 +1,4 @@
-from _ast import Call
+import hikari
 
 from lavalink_voice import LavalinkVoice
 
@@ -13,7 +13,14 @@ plugin.add_checks(lightbulb.guild_only)
 
 
 @plugin.command()
-@lightbulb.command("pause", "Pause the currently playing song")
+@lightbulb.command(
+    "pause",
+    "Pause the currently playing song",
+    name_localizations={hikari.Locale.ES_ES: "pausa"},
+    description_localizations={
+        hikari.Locale.ES_ES: "Pausa la canción que se está reproduciendo " "actualmente"
+    },
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def pause(ctx: Context) -> None:
     """Pause the currently playing song"""
@@ -47,7 +54,14 @@ async def pause(ctx: Context) -> None:
 
 
 @plugin.command()
-@lightbulb.command("resume", "Resume the currently playing song")
+@lightbulb.command(
+    "resume",
+    "Resume the currently playing song",
+    name_localizations={hikari.Locale.ES_ES: "continuar"},
+    description_localizations={
+        hikari.Locale.ES_ES: "Continua la canción que se está reproduciendo actualmente"
+    },
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def resume(ctx: Context) -> None:
     """Resume the currently playing song"""
@@ -86,8 +100,19 @@ async def resume(ctx: Context) -> None:
     "seconds",
     "The position to jump to",
     int,
+    name_localizations={hikari.Locale.ES_ES: "segundos"},
+    description_localizations={
+        hikari.Locale.ES_ES: "La posición a la que quieres saltar"
+    },
 )
-@lightbulb.command("seek", "Seek the currently playing song")
+@lightbulb.command(
+    "seek",
+    "Seek the currently playing song",
+    name_localizations={hikari.Locale.ES_ES: "buscar"},
+    description_localizations={
+        hikari.Locale.ES_ES: "Salta la canción a un segundo en especifico"
+    },
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def seek(ctx: Context) -> None:
     """Seek the currently playing song to a specific second"""
@@ -122,7 +147,12 @@ async def seek(ctx: Context) -> None:
 
 
 @plugin.command()
-@lightbulb.command("queue", "List the current queue")
+@lightbulb.command(
+    "queue",
+    "List the current queue",
+    name_localizations={hikari.Locale.ES_ES: "cola"},
+    description_localizations={hikari.Locale.ES_ES: "Lista la cola actual"},
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def queue(ctx: Context) -> None:
     """List the current queue"""
@@ -171,7 +201,9 @@ async def queue(ctx: Context) -> None:
         if i.track.info.uri:
             queue_text += f"{idx + 1} -> [`{i.track.info.author} - {i.track.info.title}`](<{i.track.info.uri}>)\n"
         else:
-            queue_text += f"{idx + 1} -> `{i.track.info.author} - {i.track.info.title}`\n"
+            queue_text += (
+                f"{idx + 1} -> `{i.track.info.author} - {i.track.info.title}`\n"
+            )
 
     if not queue_text:
         queue_text = "Empty queue"
@@ -184,8 +216,19 @@ async def queue(ctx: Context) -> None:
     "index",
     "The index of the song to remove",
     int,
+    name_localizations={hikari.Locale.ES_ES: "indice"},
+    description_localizations={
+        hikari.Locale.ES_ES: "El indice de la canción a eliminar"
+    },
 )
-@lightbulb.command("remove", "Remove the song at the specified index from the queue")
+@lightbulb.command(
+    "remove",
+    "Remove the song at the specified index from the queue",
+    name_localizations={hikari.Locale.ES_ES: "quitar"},
+    description_localizations={
+        hikari.Locale.ES_ES: "Quita la canción del indice especificado de la cola"
+    },
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def remove(ctx: Context) -> None:
     """Remove the song at the specified index from the queue"""
@@ -220,7 +263,12 @@ async def remove(ctx: Context) -> None:
 
 
 @plugin.command()
-@lightbulb.command("clear", "Clear the entire queue")
+@lightbulb.command(
+    "clear",
+    "Clear the entire queue",
+    name_localizations={hikari.Locale.ES_ES: "limpiar"},
+    description_localizations={hikari.Locale.ES_ES: "Limpia toda la cola"},
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def clear(ctx: Context) -> None:
     """Clear the entire queue"""
@@ -250,13 +298,28 @@ async def clear(ctx: Context) -> None:
     "index1",
     "The index of the one of the songs to swap",
     int,
+    name_localizations={hikari.Locale.ES_ES: "indice1"},
+    description_localizations={
+        hikari.Locale.ES_ES: "El indice de una de las canciones a intercambiar"
+    },
 )
 @lightbulb.option(
     "index2",
     "The index of the other song to swap",
     int,
+    name_localizations={hikari.Locale.ES_ES: "indice2"},
+    description_localizations={
+        hikari.Locale.ES_ES: "El indice de la otra canción a intercambiar"
+    },
 )
-@lightbulb.command("swap", "Swap the places of two songs in the queue")
+@lightbulb.command(
+    "swap",
+    "Swap the places of two songs in the queue",
+    name_localizations={hikari.Locale.ES_ES: "intercambiar"},
+    description_localizations={
+        hikari.Locale.ES_ES: "Intercambia entre si los lugares de dos canciones en la cola"
+    },
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def swap(ctx: Context) -> None:
     """Swap the places of two songs in the queue"""
@@ -310,7 +373,12 @@ async def swap(ctx: Context) -> None:
 
 
 @plugin.command()
-@lightbulb.command("shuffle", "Shuffle the queue")
+@lightbulb.command(
+    "shuffle",
+    "Shuffle the queue",
+    name_localizations={hikari.Locale.ES_ES: "mezclar"},
+    description_localizations={hikari.Locale.ES_ES: "Mezcla la cola"},
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def shuffle(ctx: Context) -> None:
     """Shuffle the queue"""
@@ -335,7 +403,14 @@ async def shuffle(ctx: Context) -> None:
 
 
 @plugin.command()
-@lightbulb.command("loop", "Loops the current song when it ends")
+@lightbulb.command(
+    "loop",
+    "Loops the current song when it ends",
+    name_localizations={hikari.Locale.ES_ES: "bucle"},
+    description_localizations={
+        hikari.Locale.ES_ES: "Vuelve a reproducir la misma canción cuando esta termina"
+    },
+)
 @lightbulb.implements(lightbulb.PrefixCommandGroup, lightbulb.SlashCommandGroup)
 async def loop(ctx: Context) -> None:
     return None
@@ -343,7 +418,13 @@ async def loop(ctx: Context) -> None:
 
 # @loop.child hace que /loop start sea un subcomando de loop
 @loop.child
-@lightbulb.command("start", "Starts the loop", auto_defer=True)
+@lightbulb.command(
+    "start",
+    "Starts the loop",
+    auto_defer=True,
+    name_localizations={hikari.Locale.ES_ES: "iniciar"},
+    description_localizations={hikari.Locale.ES_ES: "Inicia el bucle"},
+)
 @lightbulb.implements(lightbulb.PrefixSubCommand, lightbulb.SlashSubCommand)
 async def loop_start(ctx: Context) -> None:
     if not ctx.guild_id:
@@ -372,14 +453,22 @@ async def loop_start(ctx: Context) -> None:
                 f"(<{player.track.info.uri}>)"
             )
         else:
-            await ctx.respond(f"Starting the loop on track: `{player.track.info.author} - {player.track.info.title}`")
+            await ctx.respond(
+                f"Starting the loop on track: `{player.track.info.author} - {player.track.info.title}`"
+            )
     else:
         await ctx.respond("Nothing is playing at the moment")
 
 
 # @loop.child hace que /loop end sea un subcomando de loop
 @loop.child
-@lightbulb.command("end", "Ends the loop", auto_defer=True)
+@lightbulb.command(
+    "end",
+    "Ends the loop",
+    auto_defer=True,
+    name_localizations={hikari.Locale.ES_ES: "finalizar"},
+    description_localizations={hikari.Locale.ES_ES: "Finaliza el bucle"},
+)
 @lightbulb.implements(lightbulb.PrefixSubCommand, lightbulb.SlashSubCommand)
 async def loop_end(ctx: Context) -> None:
     if not ctx.guild_id:
@@ -405,7 +494,9 @@ async def loop_end(ctx: Context) -> None:
                 f"(<{player.track.info.uri}>)"
             )
         else:
-            await ctx.respond(f"Ending the loop on track: `{player.track.info.author} - {player.track.info.title}`")
+            await ctx.respond(
+                f"Ending the loop on track: `{player.track.info.author} - {player.track.info.title}`"
+            )
     else:
         await ctx.respond("Nothing is playing at the moment")
 

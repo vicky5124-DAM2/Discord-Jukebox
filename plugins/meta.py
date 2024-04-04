@@ -1,6 +1,14 @@
+import hikari
 import lightbulb
+from lightbulb import Plugin
+
+import localization
 
 plugin = lightbulb.Plugin("Meta Plugin")
+
+@plugin.listener(hikari.ShardReadyEvent, bind=True)
+async def start(plug: Plugin, event: hikari.ShardReadyEvent) -> None:
+    plug.bot.d.localizer = localization.Localizer(["en-US", "es-ES"], "en-US")
 
 
 # Register the command to the bot
@@ -13,15 +21,18 @@ plugin = lightbulb.Plugin("Meta Plugin")
 # an instance of a subclass of lightbulb.context.Context when passed in
 async def ping(ctx: lightbulb.Context) -> None:
     # Send a message to the channel the command was used in
-    await ctx.respond("Pong!")
+    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.ping.response"))
 
 
 @plugin.command()
-@lightbulb.option("text", "Text to repeat", modifier=lightbulb.OptionModifier.CONSUME_REST)
+@lightbulb.option(
+    "text", "Text to repeat", modifier=lightbulb.OptionModifier.CONSUME_REST
+)
 @lightbulb.command("echo", "Repeats the user's input")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def echo(ctx: lightbulb.Context) -> None:
     await ctx.respond(ctx.options.text)
+
 
 @plugin.command()
 @lightbulb.option("addend2", "Second addend", float)
@@ -31,6 +42,7 @@ async def echo(ctx: lightbulb.Context) -> None:
 async def add(ctx: lightbulb.Context) -> None:
     await ctx.respond(ctx.options.addend1 + ctx.options.addend2)
 
+
 @plugin.command()
 @lightbulb.option("substract2", "Second substract", float)
 @lightbulb.option("substract1", "First substract", float)
@@ -39,6 +51,7 @@ async def add(ctx: lightbulb.Context) -> None:
 async def substract(ctx: lightbulb.Context) -> None:
     await ctx.respond(ctx.options.substract1 - ctx.options.substract2)
 
+
 @plugin.command()
 @lightbulb.option("factor2", "Second factor", float)
 @lightbulb.option("factor1", "First factor", float)
@@ -46,6 +59,7 @@ async def substract(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def multiplication(ctx: lightbulb.Context) -> None:
     await ctx.respond(ctx.options.factor1 * ctx.options.factor2)
+
 
 @plugin.command()
 @lightbulb.option("divisor", "Divisor", float)

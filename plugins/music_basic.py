@@ -57,9 +57,19 @@ async def _join(ctx: Context) -> t.Optional[hikari.Snowflake]:
     hikari.GuildVoiceChannel,
     required=False,
     channel_types=[hikari.ChannelType.GUILD_VOICE],
+    name_localizations={hikari.Locale.ES_ES: "canal"},
+    description_localizations={
+        hikari.Locale.ES_ES: "El canal al que quieres que me una"
+    },
 )
 @lightbulb.command(
-    "join", "Enters the voice channel you are connected to, or the one specified"
+    "join",
+    "Enters the voice channel you are connected to, or the one specified",
+    name_localizations={hikari.Locale.ES_ES: "unir"},
+    description_localizations={
+        hikari.Locale.ES_ES: "Entra el canal de voz al que estás conectado, "
+        "o al especificado en el comando"
+    },
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def join(ctx: Context) -> None:
@@ -75,7 +85,12 @@ async def join(ctx: Context) -> None:
 
 
 @plugin.command()
-@lightbulb.command("leave", "Leaves the voice channel")
+@lightbulb.command(
+    "leave",
+    "Leaves the voice channel",
+    name_localizations={hikari.Locale.ES_ES: "salir"},
+    description_localizations={hikari.Locale.ES_ES: "El bot sale del canal de voz"},
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def leave(ctx: Context) -> None:
     """Leaves the voice channel"""
@@ -100,15 +115,19 @@ async def leave(ctx: Context) -> None:
     modifier=lightbulb.OptionModifier.CONSUME_REST,
     required=False,
     name_localizations={hikari.Locale.ES_ES: "busqueda"},
-    description_localizations={hikari.Locale.ES_ES: "La busqueda en spotify, o cualquier URL"}
+    description_localizations={
+        hikari.Locale.ES_ES: "La busqueda en spotify, o cualquier URL"
+    },
 )
 @lightbulb.command(
     "play",
     "Searches the query on spotify and adds the first result to the queue, or adds the URL to the queue",
     auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "reproducir"},
-    description_localizations={hikari.Locale.ES_ES: "Busca la consulta en Spotify y agrega el primer resultado a la "
-                                                    "cola, o agrega la URL a la cola"}
+    description_localizations={
+        hikari.Locale.ES_ES: "Busca la consulta en Spotify y agrega el primer resultado a la "
+        "cola, o agrega la URL a la cola"
+    },
 )
 @lightbulb.implements(
     lightbulb.PrefixCommand,
@@ -222,7 +241,14 @@ async def play(ctx: Context) -> None:
 
 
 @plugin.command()
-@lightbulb.command("skip", "Skip the currently playing song")
+@lightbulb.command(
+    "skip",
+    "Skip the currently playing song",
+    name_localizations={hikari.Locale.ES_ES: "saltar"},
+    description_localizations={
+        hikari.Locale.ES_ES: "Salta la canción que se está reproduciendo " "actualmente"
+    },
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def skip(ctx: Context) -> None:
     """Skip the currently playing song"""
@@ -257,7 +283,14 @@ async def skip(ctx: Context) -> None:
 
 
 @plugin.command()
-@lightbulb.command("stop", "Stop the currently playing song")
+@lightbulb.command(
+    "stop",
+    "Stop the currently playing song",
+    name_localizations={hikari.Locale.ES_ES: "parar"},
+    description_localizations={
+        hikari.Locale.ES_ES: "Para la canción que se está reproduciendo " "actualmente"
+    },
+)
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
 async def stop(ctx: Context) -> None:
     """Stop the currently playing song"""
