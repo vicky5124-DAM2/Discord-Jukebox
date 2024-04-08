@@ -6,6 +6,7 @@ import localization
 
 plugin = lightbulb.Plugin("Meta Plugin")
 
+
 @plugin.listener(hikari.ShardReadyEvent, bind=True)
 async def start(plug: Plugin, event: hikari.ShardReadyEvent) -> None:
     plug.bot.d.localizer = localization.Localizer(["en-US", "es-ES"], "en-US")

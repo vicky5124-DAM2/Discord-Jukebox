@@ -1,0 +1,25 @@
+{
+    "cmd.ping.response": "Pong!",
+    "cmd.pause.nothing_pause.response": "Nothing to pause",
+    "cmd.resume.nothing_resume.response": "Nothing to resume",
+    "cmd.seek.nothing_seek.response": "Nothing to seek",
+    "cmd.queue.now_playing.response": "Nothing",
+    "cmd.queue.queue_text.response": "Empty queue",
+    "cmd.remove.index_out_range.response": "Index out of range",
+    "cmd.clear.queue_empty.response": "The queue is already empty",
+    "cmd.clear.queue_cleared.response": "The queue has been cleared",
+    "cmd.swap.index1_out_range.response": "Index 1 out of range",
+    "cmd.swap.index2_out_range.response": "Index 2 out of range",
+    "cmd.swap.same_indexes.response": "Can't swap between the same indexes",
+    "cmd.shuffle.queue_shuffled.response": "Shuffled the queue",
+    "cmd.loop.nothing_playing.response": "Nothing is playing at the moment",
+    "cmd.join.please_join_channel.response": "Please, join a voice channel, or specify a specific channel to join in",
+    "cmd.leave.left_channel.response": "Left the voice channel",
+    "cmd.play.join_please_join_channel.response": "Please, join a voice channel first.",
+    "cmd.play.song_already_playing.response": "A song is already playing",
+    "cmd.play.empty_queue.response": "The queue is empty",
+    "cmd.play.no_found_songs.response": "No songs found",
+
+    "cmd.error.no_voice.response": "The bot is not connected to a voice channel",
+    "error.response": "Error"
+}

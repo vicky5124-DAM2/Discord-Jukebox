@@ -1,0 +1,25 @@
+{
+    "cmd.ping.response": "noooo, es tenis de mesa!",
+    "cmd.pause.nothing_pause.response": "Nada que pausar",
+    "cmd.resume.nothing_resume.response": "Nada que continuar",
+    "cmd.seek.nothing_seek.response": "Nada que buscar",
+    "cmd.queue.now_playing.response": "Nada",
+    "cmd.queue.queue_text.response": "Cola vacía",
+    "cmd.remove.index_out_range.response": "Indice fuera de rango",
+    "cmd.clear.queue_empty.response": "La cola ya está vacía",
+    "cmd.clear.queue_cleared.response": "La cola ha sido vaciada",
+    "cmd.swap.index1_out_range.response": "Indice 1 fuera de rango",
+    "cmd.swap.index2_out_range.response": "Indice 2 fuera de rango",
+    "cmd.swap.same_indexes.response": "No se puede intercambiar entre dos indices iguales",
+    "cmd.shuffle.queue_shuffled.response": "Cola mezclada",
+    "cmd.loop.nothing_playing.response": "Nada reproduciendose en este momento",
+    "cmd.join.please_join_channel.response": "Por favor, unete a un canal de voz, o especifica el canal al cual te quieres unir",
+    "cmd.leave.left_channel.response": "Has salido del canal de voz",
+    "cmd.play.join_please_join_channel.response": "Por favor, unete primero a un canal de voz",
+    "cmd.play.song_already_playing.response": "Ya se está reproduciendo una canción",
+    "cmd.play.empty_queue.response": "La cola está vacía",
+    "cmd.play.no_found_songs.response": "No se ha encontrado ninguna canción",
+
+    "cmd.error.no_voice.response": "No estoy conectado a un canal de voz",
+    "error.response": "Error"
+}

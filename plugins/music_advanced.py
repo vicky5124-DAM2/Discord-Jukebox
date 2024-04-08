@@ -30,7 +30,7 @@ async def pause(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond("Not connected to a voice channel")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
         return None
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
@@ -50,7 +50,7 @@ async def pause(ctx: Context) -> None:
         # este await pausa la cancion
         await voice.player_ctx.set_pause(True)
     else:
-        await ctx.respond("Nothing to pause")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.pause.nothing_pause.response"))
 
 
 @plugin.command()
@@ -71,7 +71,7 @@ async def resume(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
     # si voice es nulo estonces el bot no está conectado a un canal de voz
     if not voice:
-        await ctx.respond("Not connected to a voice channel")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
         return None
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
@@ -92,7 +92,7 @@ async def resume(ctx: Context) -> None:
         await voice.player_ctx.set_pause(False)
     else:
         # el reproductor no tiene nignuna canción asi que no hay nada que continuar
-        await ctx.respond("Nothing to resume")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.resume.nothing_resume.response"))
 
 
 @plugin.command()
@@ -122,7 +122,7 @@ async def seek(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
     # si voice es nulo estonces el bot no está conectado a un canal de voz
     if not voice:
-        await ctx.respond("Not connected to a voice channel")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
         return None
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
@@ -143,7 +143,7 @@ async def seek(ctx: Context) -> None:
         await voice.player_ctx.set_position_ms(ctx.options.seconds * 1000)
     else:
         # si no hay ninguna canción en el reproductor pone este mensaje
-        await ctx.respond("Nothing to seek")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.seek.nothing_seek.response"))
 
 
 @plugin.command()
@@ -162,14 +162,14 @@ async def queue(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
     # si voice es nulo estonces el bot no está conectado a un canal de voz
     if not voice:
-        await ctx.respond("Not connected to a voice channel")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
         return None
 
     assert isinstance(voice, LavalinkVoice)
 
     player = await voice.player_ctx.get_player()
 
-    now_playing = "Nothing"
+    now_playing = ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing.response")
 
     if player.track:
         # este es el tiempo de la canción en segundos (dentro del minuto)
@@ -206,7 +206,7 @@ async def queue(ctx: Context) -> None:
             )
 
     if not queue_text:
-        queue_text = "Empty queue"
+        queue_text = ctx.bot.d.localizer.get_text(ctx, "cmd.queue.queue_text.response")
 
     await ctx.respond(f"Now playing: {now_playing}\n\n{queue_text}")
 
@@ -238,7 +238,7 @@ async def remove(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond("Not connected to a voice channel")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -246,7 +246,7 @@ async def remove(ctx: Context) -> None:
     queue = await voice.player_ctx.get_queue()
     # si el indice indicado por el usuario es mayor a la longitud de la cola, saldrá este mensaje
     if ctx.options.index > len(queue):
-        await ctx.respond("Index out of range")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.remove.index_out_range.response"))
         return None
 
     assert isinstance(ctx.options.index, int)
@@ -278,7 +278,7 @@ async def clear(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond("Not connected to a voice channel")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -286,11 +286,11 @@ async def clear(ctx: Context) -> None:
     queue = await voice.player_ctx.get_queue()
 
     if not queue:
-        await ctx.respond("The queue is already empty")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.clear.queue_empty.response"))
         return None
     # da la cola vacia a voice
     voice.player_ctx.set_queue_clear()
-    await ctx.respond("The queue has been cleared")
+    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.clear.queue_cleared.response"))
 
 
 @plugin.command()
@@ -329,7 +329,7 @@ async def swap(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond("Not connected to a voice channel")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -337,15 +337,15 @@ async def swap(ctx: Context) -> None:
     queue = await voice.player_ctx.get_queue()
     # mira si el indice indicado por el usuario es mayor a la longitud de la cola
     if ctx.options.index1 > len(queue):
-        await ctx.respond("Index 1 out of range")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.swap.index1_out_range.response"))
         return None
     # mira si el indice indicado por el usuario es mayor a la longitud de la cola
     if ctx.options.index2 > len(queue):
-        await ctx.respond("Index 2 out of range")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.swap.index2_out_range.response"))
         return None
     # mira si los dos indices son el mismo
     if ctx.options.index1 == ctx.options.index2:
-        await ctx.respond("Can't swap between the same indexes")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.swap.same_indexes.response"))
         return None
 
     assert isinstance(ctx.options.index1, int)
@@ -388,7 +388,7 @@ async def shuffle(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond("Not connected to a voice channel")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -399,7 +399,7 @@ async def shuffle(ctx: Context) -> None:
     # da la cola modificada a voice
     voice.player_ctx.set_queue_replace(queue)
 
-    await ctx.respond("Shuffled the queue")
+    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.shuffle.queue_shuffled.response"))
 
 
 @plugin.command()
@@ -433,7 +433,7 @@ async def loop_start(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond("Not connected to a voice channel")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -457,7 +457,7 @@ async def loop_start(ctx: Context) -> None:
                 f"Starting the loop on track: `{player.track.info.author} - {player.track.info.title}`"
             )
     else:
-        await ctx.respond("Nothing is playing at the moment")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.loop.nothing_playing.response"))
 
 
 # @loop.child hace que /loop end sea un subcomando de loop
@@ -477,7 +477,7 @@ async def loop_end(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond("Not connected to a voice channel")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -498,7 +498,7 @@ async def loop_end(ctx: Context) -> None:
                 f"Ending the loop on track: `{player.track.info.author} - {player.track.info.title}`"
             )
     else:
-        await ctx.respond("Nothing is playing at the moment")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.loop.nothing_playing.response"))
 
 
 def load(bot: GatewayBot) -> None:
