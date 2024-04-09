@@ -281,7 +281,7 @@ async def skip(ctx: Context) -> None:
         voice.player.skip()
     # si no hay ninguna canción reproduciendose entonces pondrá un mensaje diciendolo
     else:
-        await ctx.respond("Nothing to skip")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.skip.nothing_skip.response"))
 
 
 @plugin.command()
@@ -322,7 +322,7 @@ async def stop(ctx: Context) -> None:
         # para la canción
         await voice.player.stop_now()
     else:
-        await ctx.respond("Nothing to stop")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.stop.nothing_stop.response"))
 
 
 def load(bot: GatewayBot) -> None:

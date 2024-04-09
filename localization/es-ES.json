@@ -19,6 +19,18 @@
     "cmd.play.song_already_playing.response": "Ya se está reproduciendo una canción",
     "cmd.play.empty_queue.response": "La cola está vacía",
     "cmd.play.no_found_songs.response": "No se ha encontrado ninguna canción",
+    "cmd.skip.nothing_skip.response": "Nada que saltar",
+    "cmd.stop.nothing_stop.response": "Nada que parar",
+
+
+    "cmd.pause.paused_url.response": "Pausado: [`{0} - {1}`](<{2}>)",
+    "cmd.pause.paused_no_url.response": "Pausado: `{0} - {1}`",
+    "cmd.resume.resumed_url.response": "Continuado: [`{0} - {1}`](<{2}>)",
+    "cmd.resume.resumed_no_url.response": "Continuado: `{0} - {1}`",
+    "cmd.seek.seeked_url.response": "Buscado: [`{0} - {1}`](<{2}>)",
+    "cmd.seek.seeked_no_url.response": "Buscado: `{0} - {1}`",
+    "cmd.queue.now_playing_url.response": "[`{0} - {1}`](<{2}>) | {3} (Segundo {4})",
+    "cmd.queue.now_playing_no_url.response": "`{0} - {1}` | {2} (Segundo {3})",
 
     "cmd.error.no_voice.response": "No estoy conectado a un canal de voz",
     "error.response": "Error"

@@ -19,6 +19,18 @@
     "cmd.play.song_already_playing.response": "A song is already playing",
     "cmd.play.empty_queue.response": "The queue is empty",
     "cmd.play.no_found_songs.response": "No songs found",
+    "cmd.skip.nothing_skip.response": "Nothing to skip",
+    "cmd.stop.nothing_stop.response": "Nothing to stop",
+
+
+    "cmd.pause.paused_url.response": "Paused: [`{0} - {1}`](<{2}>)",
+    "cmd.pause.paused_no_url.response": "Paused: `{0} - {1}`",
+    "cmd.resume.resumed_url.response": "Resumed: [`{0} - {1}`](<{2}>)",
+    "cmd.resume.resumed_no_url.response": "Resumed: `{0} - {1}`",
+    "cmd.seek.seeked_url.response": "Seeked: [`{0} - {1}`](<{2}>)",
+    "cmd.seek.seeked_no_url.response": "Seeked: `{0} - {1}`",
+    "cmd.queue.now_playing_url.response": "[`{0} - {1}`](<{2}>) | {3} (Second {4})",
+    "cmd.queue.now_playing_no_url.response": "`{0} - {1}` | {2} (Second {3})",
 
     "cmd.error.no_voice.response": "The bot is not connected to a voice channel",
     "error.response": "Error"

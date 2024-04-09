@@ -64,7 +64,7 @@ async def start_lavalink(plug: Plugin, event: hikari.ShardReadyEvent) -> None:
     """Event that triggers when the hikari gateway is ready."""
 
     node = lavalink_rs.NodeBuilder(
-        "localhost:2333",
+        "lavalink.vicky.rs:2333",
         False,  # is the server SSL?
         os.environ["LAVALINK_PASSWORD"],
         event.my_user.id,

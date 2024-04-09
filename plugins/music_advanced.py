@@ -41,11 +41,14 @@ async def pause(ctx: Context) -> None:
         # este if mira si hay una uri
         if player.track.info.uri:
             await ctx.respond(
-                f"Paused: [`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>)"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.pause.paused_url.response").format("player.track.info.author",
+                                                                                          "player.track.info.title",
+                                                                                          "player.track.info.uri")
             )
         else:
             await ctx.respond(
-                f"Paused: `{player.track.info.author} - {player.track.info.title}`"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.pause.paused_no_url.response").format("player.track.info.author",
+                                                                                             "player.track.info.title")
             )
         # este await pausa la cancion
         await voice.player_ctx.set_pause(True)
@@ -82,11 +85,14 @@ async def resume(ctx: Context) -> None:
         # este if mira si la canción tiene un url, si lo tiene saldrá en el mensaje del bot
         if player.track.info.uri:
             await ctx.respond(
-                f"Resumed: [`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>)"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.resume.resumed_url.response").format("player.track.info.author",
+                                                                                            "player.track.info.title",
+                                                                                            "player.track.info.uri")
             )
         else:
             await ctx.respond(
-                f"Resumed: `{player.track.info.author} - {player.track.info.title}`"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.resume.resumed_no_url.response").format(
+                    "player.track.info.author", "player.track.info.title")
             )
         # el bot continua la canción
         await voice.player_ctx.set_pause(False)
@@ -133,11 +139,14 @@ async def seek(ctx: Context) -> None:
         # este if mira si la canción tiene un url, si lo tiene saldrá en el mensaje del bot
         if player.track.info.uri:
             await ctx.respond(
-                f"Seeked: [`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>)"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.seek.seeked_url.response").format("player.track.info.author",
+                                                                                         "player.track.info.title",
+                                                                                         "player.track.info.uri")
             )
         else:
             await ctx.respond(
-                f"Seeked: `{player.track.info.author} - {player.track.info.title}`"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.seek.seeked_no_url.response").format("player.track.info.author",
+                                                                                            "player.track.info.title")
             )
         # el bot continua la canción en los segundos indicados multiplicados por 1000 (milisegundos)
         await voice.player_ctx.set_position_ms(ctx.options.seconds * 1000)
@@ -187,9 +196,14 @@ async def queue(ctx: Context) -> None:
             time = f"{time_m:02}:{time_s:02}"
 
         if player.track.info.uri:
-            now_playing = f"[`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>) | {time} (Second {time_true_s})"
+            ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_url.response").format("player.track.info.author",
+                                                                                           "player.track.info.title",
+                                                                                           "player.track.info.uri",
+                                                                                           "time",
+                                                                                           "time_true_s")
         else:
-            now_playing = f"`{player.track.info.author} - {player.track.info.title}` | {time} (Second {time_true_s})"
+            ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_no_url.response").format(
+                "player.track.info.author", "player.track.info.title", "time", "time_true_s")
     # queue es la lista de canciones que hay en la cola
     queue = await voice.player_ctx.get_queue()
     queue_text = ""
