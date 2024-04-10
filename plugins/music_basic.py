@@ -77,7 +77,7 @@ async def join(ctx: Context) -> None:
     channel_id = await _join(ctx)
 
     if channel_id:
-        await ctx.respond(f"Joined <#{channel_id}>")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.join.channel_id.response").format("channel_id"))
     else:
         await ctx.respond(
             ctx.bot.d.localizer.get_text(ctx, "cmd.join.please_join_channel.response")
@@ -190,12 +190,13 @@ async def play(ctx: Context) -> None:
 
         if loaded_tracks.info.uri:
             await ctx.respond(
-                f"Added to queue: [`{loaded_tracks.info.author} - {loaded_tracks.info.title}`]"
-                f"(<{loaded_tracks.info.uri}>)"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
+                    "loaded_tracks.info.author", "loaded_tracks.info.title", "loaded_tracks.info.uri")
             )
         else:
             await ctx.respond(
-                f"Added to queue: `{loaded_tracks.info.author} - {loaded_tracks.info.title}`"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
+                    "loaded_tracks.info.author", "loaded_tracks.info.title")
             )
 
     # Search results
@@ -204,12 +205,13 @@ async def play(ctx: Context) -> None:
 
         if loaded_tracks[0].info.uri:
             await ctx.respond(
-                f"Added to queue: [`{loaded_tracks[0].info.author} - {loaded_tracks[0].info.title}`]"
-                f"(<{loaded_tracks[0].info.uri}>)"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
+                    "loaded_tracks[0].info.author", "loaded_tracks[0].info.title", "loaded_tracks[0].info.uri")
             )
         else:
             await ctx.respond(
-                f"Added to queue: `{loaded_tracks[0].info.author} - {loaded_tracks[0].info.title}`"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
+                    "loaded_tracks[0].info.author", "loaded_tracks[0].info.title")
             )
 
     # Playlist
@@ -220,15 +222,18 @@ async def play(ctx: Context) -> None:
 
             if track.info.uri:
                 await ctx.respond(
-                    f"Added to queue: [`{track.info.author} - {track.info.title}`](<{track.info.uri}>)"
+                    ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
+                        "track.info.author", "track.info.title", "track.info.uri")
                 )
             else:
                 await ctx.respond(
-                    f"Added to queue: `{track.info.author} - {track.info.title}`"
+                    ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
+                        "track.info.author", "track.info.title", "track.info.uri")
                 )
         else:
             player_ctx.set_queue_append(loaded_tracks.tracks)
-            await ctx.respond(f"Added playlist to queue: `{loaded_tracks.info.name}`")
+            await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_playlist_to_queue.response").format(
+                        "loaded_tracks.info.name"))
 
     # Error or no results
     else:
@@ -271,7 +276,9 @@ async def skip(ctx: Context) -> None:
     if player.track:
         if player.track.info.uri:
             await ctx.respond(
-                f"Skipped: [`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>)"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.skip.skipped_url.response").format("player.track.info.author",
+                                                                                          "player.track.info.title",
+                                                                                          "player.track.info.uri")
             )
         else:
             await ctx.respond(

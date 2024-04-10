@@ -222,7 +222,8 @@ async def queue(ctx: Context) -> None:
     if not queue_text:
         queue_text = ctx.bot.d.localizer.get_text(ctx, "cmd.queue.queue_text.response")
 
-    await ctx.respond(f"Now playing: {now_playing}\n\n{queue_text}")
+    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_queue.response").format(
+        "now_playing", "queue_text"))
 
 
 @plugin.command()
@@ -268,10 +269,12 @@ async def remove(ctx: Context) -> None:
 
     if track.info.uri:
         await ctx.respond(
-            f"Removed: [`{track.info.author} - {track.info.title}`](<{track.info.uri}>)"
+            ctx.bot.d.localizer.get_text(ctx, "cmd.remove.removed_url.response").format(
+                "track.info.author", "track.info.title", "track.info.uri")
         )
     else:
-        await ctx.respond(f"Removed: `{track.info.author} - {track.info.title}`")
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.remove.removed_url.response").format(
+                "track.info.author", "track.info.title"))
     # el indice de la cola se reduce en uno
     voice.player_ctx.set_queue_remove(ctx.options.index - 1)
 
@@ -383,7 +386,8 @@ async def swap(ctx: Context) -> None:
     else:
         track2_text = f"`{track2.track.info.author} - {track2.track.info.title}`"
 
-    await ctx.respond(f"Swapped {track2_text} with {track1_text}")
+    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.swap.swapped.response").format("track2_text",
+                                                                                            "track1_text"))
 
 
 @plugin.command()
@@ -463,12 +467,13 @@ async def loop_start(ctx: Context) -> None:
 
         if player.track.info.uri:
             await ctx.respond(
-                f"Starting the loop on track: [`{player.track.info.author} - {player.track.info.title}`]"
-                f"(<{player.track.info.uri}>)"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.loop_start.starting_loop_url.response").format(
+                    "player.track.info.author", "player.track.info.title", "player.track.info.uri")
             )
         else:
             await ctx.respond(
-                f"Starting the loop on track: `{player.track.info.author} - {player.track.info.title}`"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.loop_start.starting_loop_no_url.response").format(
+                    "player.track.info.author", "player.track.info.title")
             )
     else:
         await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.loop.nothing_playing.response"))
@@ -504,12 +509,13 @@ async def loop_end(ctx: Context) -> None:
             voice.lavalink.data.remove(ctx.guild_id)
         if player.track.info.uri:
             await ctx.respond(
-                f"Ending the loop on track: [`{player.track.info.author} - {player.track.info.title}`]"
-                f"(<{player.track.info.uri}>)"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.loop_end.ending_loop_url.response").format(
+                    "player.track.info.author", "player.track.info.title", "player.track.info.uri")
             )
         else:
             await ctx.respond(
-                f"Ending the loop on track: `{player.track.info.author} - {player.track.info.title}`"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.loop_end.ending_loop_no_url.response").format(
+                    "player.track.info.author", "player.track.info.title")
             )
     else:
         await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.loop.nothing_playing.response"))
