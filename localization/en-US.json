@@ -44,7 +44,12 @@
     "cmd.play.added_to_queue_no_url.response": "Added to queue: `{0} - {1}`",
     "cmd.play.added_playlist_to_queue.response": "Added playlist to queue: `{0}`",
     "cmd.skip.skipped_url.response": "Skipped: [`{0} - {1}`](<{2}>)",
+    "cmd.skip.skipped_no_url.response": "Skipped: `{0} - {1}`",
+    "cmd.stop.stopped_url.response": "Stopped: [`{0} - {1}`](<{2}>)",
+    "cmd.stop.stopped_no_url.response": "Stopped: `{0} - {1}`",
 
     "cmd.error.no_voice.response": "The bot is not connected to a voice channel",
-    "error.response": "Error"
+    "error.response": "Error",
+
+    "event.track_start_url.response": "Started playing [`{0} - {1}`](<{2}>)"
 }

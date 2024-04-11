@@ -68,7 +68,7 @@ async def _join(ctx: Context) -> t.Optional[hikari.Snowflake]:
     name_localizations={hikari.Locale.ES_ES: "unir"},
     description_localizations={
         hikari.Locale.ES_ES: "Entra el canal de voz al que estás conectado, "
-        "o al especificado en el comando"
+                             "o al especificado en el comando"
     },
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -77,7 +77,7 @@ async def join(ctx: Context) -> None:
     channel_id = await _join(ctx)
 
     if channel_id:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.join.channel_id.response").format("channel_id"))
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.join.channel_id.response").format(channel_id))
     else:
         await ctx.respond(
             ctx.bot.d.localizer.get_text(ctx, "cmd.join.please_join_channel.response")
@@ -126,7 +126,7 @@ async def leave(ctx: Context) -> None:
     name_localizations={hikari.Locale.ES_ES: "reproducir"},
     description_localizations={
         hikari.Locale.ES_ES: "Busca la consulta en Spotify y agrega el primer resultado a la "
-        "cola, o agrega la URL a la cola"
+                             "cola, o agrega la URL a la cola"
     },
 )
 @lightbulb.implements(
@@ -191,12 +191,12 @@ async def play(ctx: Context) -> None:
         if loaded_tracks.info.uri:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
-                    "loaded_tracks.info.author", "loaded_tracks.info.title", "loaded_tracks.info.uri")
+                    loaded_tracks.info.author, loaded_tracks.info.title, loaded_tracks.info.uri)
             )
         else:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
-                    "loaded_tracks.info.author", "loaded_tracks.info.title")
+                    loaded_tracks.info.author, loaded_tracks.info.title)
             )
 
     # Search results
@@ -206,12 +206,12 @@ async def play(ctx: Context) -> None:
         if loaded_tracks[0].info.uri:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
-                    "loaded_tracks[0].info.author", "loaded_tracks[0].info.title", "loaded_tracks[0].info.uri")
+                    loaded_tracks[0].info.author, loaded_tracks[0].info.title, loaded_tracks[0].info.uri)
             )
         else:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
-                    "loaded_tracks[0].info.author", "loaded_tracks[0].info.title")
+                    loaded_tracks[0].info.author, loaded_tracks[0].info.title)
             )
 
     # Playlist
@@ -223,17 +223,17 @@ async def play(ctx: Context) -> None:
             if track.info.uri:
                 await ctx.respond(
                     ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
-                        "track.info.author", "track.info.title", "track.info.uri")
+                        track.info.author, track.info.title, track.info.uri)
                 )
             else:
                 await ctx.respond(
                     ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
-                        "track.info.author", "track.info.title", "track.info.uri")
+                        track.info.author, track.info.title, track.info.uri)
                 )
         else:
             player_ctx.set_queue_append(loaded_tracks.tracks)
             await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_playlist_to_queue.response").format(
-                        "loaded_tracks.info.name"))
+                loaded_tracks.info.name))
 
     # Error or no results
     else:
@@ -276,13 +276,14 @@ async def skip(ctx: Context) -> None:
     if player.track:
         if player.track.info.uri:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.skip.skipped_url.response").format("player.track.info.author",
-                                                                                          "player.track.info.title",
-                                                                                          "player.track.info.uri")
+                ctx.bot.d.localizer.get_text(ctx, "cmd.skip.skipped_url.response").format(player.track.info.author,
+                                                                                          player.track.info.title,
+                                                                                          player.track.info.uri)
             )
         else:
             await ctx.respond(
-                f"Skipped: `{player.track.info.author} - {player.track.info.title}`"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.skip.skipped_no_url.response").format(player.track.info.author,
+                                                                                             player.track.info.title)
             )
         # el bot salta a la siguiente canción en la cola
         voice.player.skip()
@@ -320,11 +321,14 @@ async def stop(ctx: Context) -> None:
     if player.track:
         if player.track.info.uri:
             await ctx.respond(
-                f"Stopped: [`{player.track.info.author} - {player.track.info.title}`](<{player.track.info.uri}>)"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.stop.stopped_url.response").format(player.track.info.author,
+                                                                                          player.track.info.title,
+                                                                                          player.track.info.uri)
             )
         else:
             await ctx.respond(
-                f"Stopped: `{player.track.info.author} - {player.track.info.title}`"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.stop.stopped_no_url.response").format(player.track.info.author,
+                                                                                             player.track.info.title)
             )
         # para la canción
         await voice.player.stop_now()

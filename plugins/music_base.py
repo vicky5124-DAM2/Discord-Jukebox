@@ -45,12 +45,15 @@ class Events(lavalink_rs.EventHandler):
         data = t.cast(t.Tuple[hikari.Snowflake, hikari.api.RESTClient], player_ctx.data)
 
         if event.track.info.uri:
-            await data[1].create_message(
+            await data[1].rest.create_message(
                 data[0],
+                '''locale.bot.d.localizer.get_text(locale, "event.track_start_url.response").format(event.track.info.author,
+                                                                                           event.track.info.title,
+                                                                                           event.track.info.uri)'''
                 f"Started playing [`{event.track.info.author} - {event.track.info.title}`](<{event.track.info.uri}>)",
             )
         else:
-            await data[1].create_message(
+            await data[1].rest.create_message(
                 data[0],
                 f"Started playing `{event.track.info.author} - {event.track.info.title}`",
             )
