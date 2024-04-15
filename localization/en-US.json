@@ -51,5 +51,6 @@
     "cmd.error.no_voice.response": "The bot is not connected to a voice channel",
     "error.response": "Error",
 
-    "event.track_start_url.response": "Started playing [`{0} - {1}`](<{2}>)"
+    "event.track_start_url.response": "Started playing [`{0} - {1}`](<{2}>)",
+    "event.track_start_no_url.response": "Started playing `{0} - {1}`"
 }

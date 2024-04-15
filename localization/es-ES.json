@@ -51,5 +51,6 @@
     "cmd.error.no_voice.response": "No estoy conectado a un canal de voz",
     "error.response": "Error",
 
-    "event.track_start_url.response": "Iniciada la reproducción de [`{0} - {1}`](<{2}>)"
+    "event.track_start_url.response": "Iniciada la reproducción de [`{0} - {1}`](<{2}>)",
+    "event.track_start_no_url.response": "Iniciada de reproducción de `{0} - {1}`"
 }

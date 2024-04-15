@@ -44,7 +44,7 @@ async def _join(ctx: Context) -> t.Optional[hikari.Snowflake]:
             channel_id,
             ctx.bot,
             ctx.bot.d.lavalink,
-            (ctx.channel_id, ctx.bot.rest),
+            (ctx.channel_id, ctx.bot, ctx.interaction or ctx.interaction.locale),
         )
 
     return channel_id

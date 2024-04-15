@@ -1,3 +1,4 @@
+import locale
 import os
 import logging
 import typing as t
@@ -42,20 +43,19 @@ class Events(lavalink_rs.EventHandler):
         assert player_ctx
         assert player_ctx.data
 
-        data = t.cast(t.Tuple[hikari.Snowflake, hikari.api.RESTClient], player_ctx.data)
+        data = player_ctx.data
 
         if event.track.info.uri:
             await data[1].rest.create_message(
                 data[0],
-                '''locale.bot.d.localizer.get_text(locale, "event.track_start_url.response").format(event.track.info.author,
-                                                                                           event.track.info.title,
-                                                                                           event.track.info.uri)'''
-                f"Started playing [`{event.track.info.author} - {event.track.info.title}`](<{event.track.info.uri}>)",
+                data[1].bot.d.localizer.get_text(data[2], "event.track_start_url.response").format(
+                    event.track.info.author, event.track.info.title, event.track.info.uri),
             )
         else:
             await data[1].rest.create_message(
                 data[0],
-                f"Started playing `{event.track.info.author} - {event.track.info.title}`",
+                data[1].bot.d.localizer.get_text(data[2], "event.track_start_no_url.response").format(
+                    event.track.info.author, event.track.info.title),
             )
 
         if client.data and event.guild_id in client.data:
