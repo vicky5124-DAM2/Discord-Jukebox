@@ -48,7 +48,7 @@ class Events(lavalink_rs.EventHandler):
         if event.track.info.uri:
             await data[1].rest.create_message(
                 data[0],
-                data[1].bot.d.localizer.get_text(data[2], "event.track_start_url.response").format(
+                data[1].d.localizer.get_text(data[2], "event.track_start_url.response").format(
                     event.track.info.author, event.track.info.title, event.track.info.uri),
             )
         else:

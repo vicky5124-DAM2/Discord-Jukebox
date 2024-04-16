@@ -196,13 +196,10 @@ async def queue(ctx: Context) -> None:
             time = f"{time_m:02}:{time_s:02}"
 
         if player.track.info.uri:
-            ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_url.response").format(player.track.info.author,
-                                                                                           player.track.info.title,
-                                                                                           player.track.info.uri,
-                                                                                           time,
-                                                                                           time_true_s)
+            now_playing = ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_url.response").format(
+                player.track.info.author, player.track.info.title, player.track.info.uri, time, time_true_s)
         else:
-            ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_no_url.response").format(
+            now_playing = ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_no_url.response").format(
                 player.track.info.author, player.track.info.title, time, time_true_s)
     # queue es la lista de canciones que hay en la cola
     queue = await voice.player_ctx.get_queue()
@@ -223,7 +220,7 @@ async def queue(ctx: Context) -> None:
         queue_text = ctx.bot.d.localizer.get_text(ctx, "cmd.queue.queue_text.response")
 
     await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_queue.response").format(
-        now_playing, queue_text)).replace("\\n", "\n")
+        now_playing, queue_text.replace("\\n", "\n")))
 
 
 @plugin.command()

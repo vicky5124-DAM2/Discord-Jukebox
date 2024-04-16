@@ -31,7 +31,7 @@
     "cmd.seek.seeked_no_url.response": "Seeked: `{0} - {1}`",
     "cmd.queue.now_playing_url.response": "[`{0} - {1}`](<{2}>) | {3} (Second {4})",
     "cmd.queue.now_playing_no_url.response": "`{0} - {1}` | {2} (Second {3})",
-    "cmd.queue.now_playing_queue.response": "Now playing: {0}\\n\\n{1}",
+    "cmd.queue.now_playing_queue.response": "Now playing: {0}\n\n{1}",
     "cmd.remove.removed_url.response": "Removed: [`{0} - {1}`](<{2}>)",
     "cmd.remove.removed_no_url.response": "Removed: `{0} - {1}`",
     "cmd.swap.swapped.response": "Swapped {0} with {1}",

@@ -39,12 +39,15 @@ async def _join(ctx: Context) -> t.Optional[hikari.Snowflake]:
     # si no está conectado a ningún canal, entonces se conecta al canal introducido en el comando,
     # o en el que está el usuario
     if not voice:
+        locale = None
+        if ctx.interaction:
+            locale = ctx.interaction.locale
         voice = await LavalinkVoice.connect(
             ctx.guild_id,
             channel_id,
             ctx.bot,
             ctx.bot.d.lavalink,
-            (ctx.channel_id, ctx.bot, ctx.interaction or ctx.interaction.locale),
+            (ctx.channel_id, ctx.bot, locale),
         )
 
     return channel_id
@@ -270,7 +273,7 @@ async def skip(ctx: Context) -> None:
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
     # player es el reproductor de musica que usa el bot cuando se une a un canal de voz
-    player = await voice.player.get_player()
+    player = await voice.player_ctx.get_player()
     # si se está reproduciendo una canción el bot introducirá en un mensaje la canción que ha saltado,
     # con la información de esta
     if player.track:
@@ -286,7 +289,7 @@ async def skip(ctx: Context) -> None:
                                                                                              player.track.info.title)
             )
         # el bot salta a la siguiente canción en la cola
-        voice.player.skip()
+        voice.player_ctx.skip()
     # si no hay ninguna canción reproduciendose entonces pondrá un mensaje diciendolo
     else:
         await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.skip.nothing_skip.response"))
@@ -315,7 +318,7 @@ async def stop(ctx: Context) -> None:
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
     # player es el reproductor de musica que usa el bot cuando se une a un canal de voz
-    player = await voice.player.get_player()
+    player = await voice.player_ctx.get_player()
     # si se está reproduciendo una canción el bot introducirá en un mensaje la canción que ha parado,
     # con la información de esta
     if player.track:
@@ -331,7 +334,7 @@ async def stop(ctx: Context) -> None:
                                                                                              player.track.info.title)
             )
         # para la canción
-        await voice.player.stop_now()
+        await voice.player_ctx.stop_now()
     else:
         await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.stop.nothing_stop.response"))
 
