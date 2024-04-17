@@ -68,6 +68,7 @@ async def _join(ctx: Context) -> t.Optional[hikari.Snowflake]:
 @lightbulb.command(
     "join",
     "Enters the voice channel you are connected to, or the one specified",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "unir"},
     description_localizations={
         hikari.Locale.ES_ES: "Entra el canal de voz al que estás conectado, "
@@ -91,6 +92,7 @@ async def join(ctx: Context) -> None:
 @lightbulb.command(
     "leave",
     "Leaves the voice channel",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "salir"},
     description_localizations={hikari.Locale.ES_ES: "El bot sale del canal de voz"},
 )
@@ -254,6 +256,7 @@ async def play(ctx: Context) -> None:
 @lightbulb.command(
     "skip",
     "Skip the currently playing song",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "saltar"},
     description_localizations={
         hikari.Locale.ES_ES: "Salta la canción que se está reproduciendo " "actualmente"
@@ -299,6 +302,7 @@ async def skip(ctx: Context) -> None:
 @lightbulb.command(
     "stop",
     "Stop the currently playing song",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "parar"},
     description_localizations={
         hikari.Locale.ES_ES: "Para la canción que se está reproduciendo " "actualmente"

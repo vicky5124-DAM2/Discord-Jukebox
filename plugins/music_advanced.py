@@ -16,6 +16,7 @@ plugin.add_checks(lightbulb.guild_only)
 @lightbulb.command(
     "pause",
     "Pause the currently playing song",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "pausa"},
     description_localizations={
         hikari.Locale.ES_ES: "Pausa la canción que se está reproduciendo " "actualmente"
@@ -60,6 +61,7 @@ async def pause(ctx: Context) -> None:
 @lightbulb.command(
     "resume",
     "Resume the currently playing song",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "continuar"},
     description_localizations={
         hikari.Locale.ES_ES: "Continua la canción que se está reproduciendo actualmente"
@@ -114,6 +116,7 @@ async def resume(ctx: Context) -> None:
 @lightbulb.command(
     "seek",
     "Seek the currently playing song",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "buscar"},
     description_localizations={
         hikari.Locale.ES_ES: "Salta la canción a un segundo en especifico"
@@ -159,6 +162,7 @@ async def seek(ctx: Context) -> None:
 @lightbulb.command(
     "queue",
     "List the current queue",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "cola"},
     description_localizations={hikari.Locale.ES_ES: "Lista la cola actual"},
 )
@@ -236,6 +240,7 @@ async def queue(ctx: Context) -> None:
 @lightbulb.command(
     "remove",
     "Remove the song at the specified index from the queue",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "quitar"},
     description_localizations={
         hikari.Locale.ES_ES: "Quita la canción del indice especificado de la cola"
@@ -280,6 +285,7 @@ async def remove(ctx: Context) -> None:
 @lightbulb.command(
     "clear",
     "Clear the entire queue",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "limpiar"},
     description_localizations={hikari.Locale.ES_ES: "Limpia toda la cola"},
 )
@@ -329,6 +335,7 @@ async def clear(ctx: Context) -> None:
 @lightbulb.command(
     "swap",
     "Swap the places of two songs in the queue",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "intercambiar"},
     description_localizations={
         hikari.Locale.ES_ES: "Intercambia entre si los lugares de dos canciones en la cola"
@@ -391,6 +398,7 @@ async def swap(ctx: Context) -> None:
 @lightbulb.command(
     "shuffle",
     "Shuffle the queue",
+    auto_defer=True,
     name_localizations={hikari.Locale.ES_ES: "mezclar"},
     description_localizations={hikari.Locale.ES_ES: "Mezcla la cola"},
 )
