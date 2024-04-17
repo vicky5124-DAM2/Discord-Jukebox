@@ -179,7 +179,7 @@ async def play(ctx: Context) -> None:
 
     # si no es una url, el bot buscará el argumento indicado por el usuario en youtube
     if not query.startswith("http"):
-        query = f"dzsearch:{query}"
+        query = f"spsearch:{query}"
 
     try:
         # loaded_tracks son los resultados de la busqueda del bot o del url
