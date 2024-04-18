@@ -466,9 +466,9 @@ async def loop_start(ctx: Context) -> None:
     if player.track:
         voice.player_ctx.set_queue_push_to_front(player.track)
         if voice.lavalink.data:
-            voice.lavalink.data.append(ctx.guild_id)
+            voice.lavalink.data.add(ctx.guild_id)
         else:
-            voice.lavalink.data = [ctx.guild_id]
+            voice.lavalink.data = {ctx.guild_id}
 
         if player.track.info.uri:
             await ctx.respond(
