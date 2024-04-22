@@ -11,7 +11,7 @@ load_dotenv()
 bot = lightbulb.BotApp(
     token=os.environ["DISCORD_TOKEN"],
     prefix=os.environ["DISCORD_PREFIX"],
-    default_enabled_guilds=1214648265836990524,
+    default_enabled_guilds=[1214648265836990524, 1232023091832557618],
     intents=hikari.Intents.ALL_MESSAGES
     | hikari.Intents.GUILDS
     | hikari.Intents.MESSAGE_CONTENT
