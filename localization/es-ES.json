@@ -47,9 +47,12 @@
     "cmd.skip.skipped_no_url.response": "Saltado: `{0} - {1}`",
     "cmd.stop.stopped_url.response": "Parado: [`{0} - {1}`](<{2}>)",
     "cmd.stop.stopped_no_url.response": "Parado: `{0} - {1}`",
+    "cmd.play.yt-dlp.unknown_title": "Titulo desconocido",
+    "cmd.play.yt-dlp.unknown_artist": "Artista desconocido",
 
     "cmd.error.no_voice.response": "No estoy conectado a un canal de voz",
     "error.response": "Error",
+    "cmd.play.url_not_supported": "URL no soportada",
 
     "event.track_start_url.response": "Iniciada la reproducción de [`{0} - {1}`](<{2}>)",
     "event.track_start_no_url.response": "Iniciada de reproducción de `{0} - {1}`"

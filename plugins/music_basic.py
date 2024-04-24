@@ -211,7 +211,10 @@ async def play(ctx: Context) -> None:
             return info  # type: ignore
 
         loop = asyncio.get_event_loop()
-        ytdl_query = await loop.run_in_executor(None, extract)
+        try:
+            ytdl_query = await loop.run_in_executor(None, extract)
+        except:
+            await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.url_not_supported"))
 
         try:
             loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, ytdl_query["url"])
@@ -234,8 +237,8 @@ async def play(ctx: Context) -> None:
 
         info = loaded_tracks.info
 
-        info.title = ytdl_query.get("title") or "Unknown title"
-        info.author = ytdl_query.get("uploader") or "Unknown artist"
+        info.title = ytdl_query.get("title") or ctx.bot.d.localizer.get_text(ctx, "cmd.play.yt-dlp.unknown_title")
+        info.author = ytdl_query.get("uploader") or ctx.bot.d.localizer.get_text(ctx, "cmd.play.yt-dlp.unknown_artist")
         info.uri = ytdl_query.get("original_url")
 
         loaded_tracks.info = info
