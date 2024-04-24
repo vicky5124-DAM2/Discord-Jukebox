@@ -1,9 +1,13 @@
+import asyncio
+from pprint import pprint
+
 from lavalink_voice import LavalinkVoice
 
 import logging
 import typing as t
 
 import hikari
+import yt_dlp
 import lightbulb
 from hikari import GatewayBot
 from lightbulb import Plugin, Context
@@ -11,6 +15,19 @@ from lavalink_rs.model.track import TrackData, PlaylistData
 
 plugin = Plugin("Music (basic) commands")
 plugin.add_checks(lightbulb.guild_only)
+
+ytdl_format_options = {
+    "format": "bestaudio/best",
+    "restrictfilenames": True,
+    "noplaylist": True,
+    "nocheckcertificate": True,
+    "ignoreerrors": False,
+    "logtostderr": False,
+    "quiet": True,
+    "no_warnings": True,
+    "default_search": "auto",
+}
+ytdl = yt_dlp.YoutubeDL(ytdl_format_options)
 
 
 async def _join(ctx: Context) -> t.Optional[hikari.Snowflake]:
@@ -172,6 +189,7 @@ async def play(ctx: Context) -> None:
             else:
                 await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.empty_queue.response"))
 
+
         return None
 
     # hacemos replace de < y > por un "" para evitar que los enlaces sean invalidos
@@ -185,8 +203,60 @@ async def play(ctx: Context) -> None:
         # loaded_tracks son los resultados de la busqueda del bot o del url
         loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, query)
     except Exception as e:
-        logging.error(e)
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "error.response"))
+        ytdl_query = {}
+
+        def extract() -> t.Dict[str, t.Any]:
+            info = ytdl.extract_info(query, download=False)
+            t.cast(t.Dict[str, t.Any], info)
+            return info  # type: ignore
+
+        loop = asyncio.get_event_loop()
+        ytdl_query = await loop.run_in_executor(None, extract)
+
+        try:
+            loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, ytdl_query["url"])
+            if not isinstance(loaded_tracks, TrackData):
+                valid = []
+                for i in ytdl_query["formats"]:
+                    if not i.get("filesize_approx"):
+                        valid.append(i["url"])
+                loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, valid[-1])
+
+            if not isinstance(loaded_tracks, TrackData):  # tracks is empty
+                logging.error(e)
+                await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "error.response"))
+                return None
+
+        except Exception as e:
+            logging.error(e)
+            await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "error.response"))
+            return None
+
+        info = loaded_tracks.info
+
+        info.title = ytdl_query.get("title") or "Unknown title"
+        info.author = ytdl_query.get("uploader") or "Unknown artist"
+        info.uri = ytdl_query.get("original_url")
+
+        loaded_tracks.info = info
+
+        player_ctx.queue(loaded_tracks)
+
+        if loaded_tracks.info.uri:
+            await ctx.respond(
+                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
+                    loaded_tracks.info.author, loaded_tracks.info.title, loaded_tracks.info.uri)
+            )
+        else:
+            await ctx.respond(
+                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
+                    loaded_tracks.info.author, loaded_tracks.info.title)
+            )
+        player_data = await player_ctx.get_player()
+
+        if player_data:
+            if not player_data.track and await player_ctx.get_queue() and not has_joined:
+                player_ctx.skip()
         return None
 
     # Single track
@@ -242,7 +312,7 @@ async def play(ctx: Context) -> None:
 
     # Error or no results
     else:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.no_found_songs.response"))
+        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "error.response"))
         return None
 
     player_data = await player_ctx.get_player()

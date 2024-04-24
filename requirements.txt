@@ -2,3 +2,4 @@ hikari==2.0.0.dev122
 hikari-lightbulb==2.3.5
 lavalink_rs==0.11.2
 python-dotenv==1.0.1
+yt-dlp==2024.4.9
