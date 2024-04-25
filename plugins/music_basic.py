@@ -189,7 +189,6 @@ async def play(ctx: Context) -> None:
             else:
                 await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.empty_queue.response"))
 
-
         return None
 
     # hacemos replace de < y > por un "" para evitar que los enlaces sean invalidos
@@ -203,11 +202,13 @@ async def play(ctx: Context) -> None:
         # loaded_tracks son los resultados de la busqueda del bot o del url
         loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, query)
     except Exception as e:
+        # si no encuentra resultados con la busqueda en spotify...
+        # el bot buscará en yt-dlp
         ytdl_query = {}
 
+        # el metodo extract() extrae la información del resultado de la query
         def extract() -> t.Dict[str, t.Any]:
             info = ytdl.extract_info(query, download=False)
-            t.cast(t.Dict[str, t.Any], info)
             return info  # type: ignore
 
         loop = asyncio.get_event_loop()
