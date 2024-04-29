@@ -1,6 +1,8 @@
 import asyncio
 from pprint import pprint
 
+from lavalink_rs import PlayerContext
+
 from lavalink_voice import LavalinkVoice
 
 import logging
@@ -201,77 +203,31 @@ async def play(ctx: Context) -> None:
     try:
         # loaded_tracks son los resultados de la busqueda del bot o del url
         loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, query)
+    # si loaded_tracks está vacío, entonces la excepción buscará la query en yt_dlp
     except Exception as e:
-        # si no encuentra resultados con la busqueda en spotify...
-        # el bot buscará en yt-dlp
-        ytdl_query = {}
-
-        # el metodo extract() extrae la información del resultado de la query
-        def extract() -> t.Dict[str, t.Any]:
-            info = ytdl.extract_info(query, download=False)
-            return info  # type: ignore
-
-        loop = asyncio.get_event_loop()
         try:
-            ytdl_query = await loop.run_in_executor(None, extract)
-        except:
+            await play_yt_dlp(query, ctx, player_ctx, has_joined)
+        # si la aplicación no soporta la url entonces saldrá una excepción con un mensaje anunciandolo
+        except yt_dlp.UnsupportedUrl:
             await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.url_not_supported"))
-
-        try:
-            loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, ytdl_query["url"])
-            if not isinstance(loaded_tracks, TrackData):
-                valid = []
-                for i in ytdl_query["formats"]:
-                    if not i.get("filesize_approx"):
-                        valid.append(i["url"])
-                loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, valid[-1])
-
-            if not isinstance(loaded_tracks, TrackData):  # tracks is empty
-                logging.error(e)
-                await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "error.response"))
-                return None
-
         except Exception as e:
+            # logging.error son mensajes que salen cuando corres la aplicación
             logging.error(e)
             await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "error.response"))
-            return None
-
-        info = loaded_tracks.info
-
-        info.title = ytdl_query.get("title") or ctx.bot.d.localizer.get_text(ctx, "cmd.play.yt-dlp.unknown_title")
-        info.author = ytdl_query.get("uploader") or ctx.bot.d.localizer.get_text(ctx, "cmd.play.yt-dlp.unknown_artist")
-        info.uri = ytdl_query.get("original_url")
-
-        loaded_tracks.info = info
-
-        player_ctx.queue(loaded_tracks)
-
-        if loaded_tracks.info.uri:
-            await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
-                    loaded_tracks.info.author, loaded_tracks.info.title, loaded_tracks.info.uri)
-            )
-        else:
-            await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
-                    loaded_tracks.info.author, loaded_tracks.info.title)
-            )
-        player_data = await player_ctx.get_player()
-
-        if player_data:
-            if not player_data.track and await player_ctx.get_queue() and not has_joined:
-                player_ctx.skip()
         return None
 
     # Single track
+    # este if mira si el resultado de la query hay resultados, si es una canción, una playlist, si está vacío o si
+    # hay un error
     if isinstance(loaded_tracks, TrackData):
         player_ctx.queue(loaded_tracks)
-
+        # si hay url, la pone en el mensaje de la información de la canción cuando empieza la canción
         if loaded_tracks.info.uri:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
                     loaded_tracks.info.author, loaded_tracks.info.title, loaded_tracks.info.uri)
             )
+        # si no, pone el mensaje sin la url
         else:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
@@ -316,9 +272,69 @@ async def play(ctx: Context) -> None:
 
     # Error or no results
     else:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "error.response"))
+        try:
+            await play_yt_dlp(query, ctx, player_ctx, has_joined)
+        except yt_dlp.UnsupportedUrl:
+            await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.url_not_supported"))
+        except Exception as e:
+            logging.error(e)
+            await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "error.response"))
         return None
 
+    await try_play(player_ctx, has_joined)
+    return None
+
+
+async def play_yt_dlp(query: str, ctx: Context, player_ctx: PlayerContext, has_joined: bool):
+    # si no encuentra resultados con la busqueda en spotify...
+    # el bot buscará en yt-dlp
+    ytdl_query = {}
+
+    # el metodo extract() extrae la información del resultado de la query
+    def extract() -> t.Dict[str, t.Any]:
+        info = ytdl.extract_info(query, download=False)
+        return info  # type: ignore
+
+    loop = asyncio.get_event_loop()
+
+    ytdl_query = await loop.run_in_executor(None, extract)
+
+    loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, ytdl_query["url"])
+    if not isinstance(loaded_tracks, TrackData):
+        valid = []
+        for i in ytdl_query["formats"]:
+            if not i.get("filesize_approx"):
+                valid.append(i["url"])
+        loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, valid[-1])
+
+    if not isinstance(loaded_tracks, TrackData):  # tracks is empty
+        raise Exception("Invalid API response")
+
+    info = loaded_tracks.info
+
+    info.title = ytdl_query.get("title") or ctx.bot.d.localizer.get_text(ctx, "cmd.play.yt-dlp.unknown_title")
+    info.author = ytdl_query.get("uploader") or ctx.bot.d.localizer.get_text(ctx, "cmd.play.yt-dlp.unknown_artist")
+    info.uri = ytdl_query.get("original_url")
+
+    loaded_tracks.info = info
+
+    player_ctx.queue(loaded_tracks)
+
+    if loaded_tracks.info.uri:
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
+                loaded_tracks.info.author, loaded_tracks.info.title, loaded_tracks.info.uri)
+        )
+    else:
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
+                loaded_tracks.info.author, loaded_tracks.info.title)
+        )
+    await try_play(player_ctx, has_joined)
+    return None
+
+
+async def try_play(player_ctx: PlayerContext, has_joined: bool):
     player_data = await player_ctx.get_player()
 
     if player_data:
