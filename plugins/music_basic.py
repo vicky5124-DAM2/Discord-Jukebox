@@ -235,14 +235,16 @@ async def play(ctx: Context) -> None:
             )
 
     # Search results
+    # este elif coge el primer resultado de la busqueda de la query (cuando no se pone un enlace de música)
     elif isinstance(loaded_tracks, list):
         player_ctx.queue(loaded_tracks[0])
-
+        # si hay url, la pone en el mensaje de la información de la canción cuando empieza la canción
         if loaded_tracks[0].info.uri:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
                     loaded_tracks[0].info.author, loaded_tracks[0].info.title, loaded_tracks[0].info.uri)
             )
+        # si no, pone el mensaje sin la url
         else:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
@@ -250,37 +252,47 @@ async def play(ctx: Context) -> None:
             )
 
     # Playlist
+    # se llega a este elif cuando pones una playlist en la query
     elif isinstance(loaded_tracks, PlaylistData):
+        # en este if se pone la información del video del enlace (que está dentro de una playlist)
         if loaded_tracks.info.selected_track:
+            # se añade la playlist a la cola con el video del enlace en primer lugar
             track = loaded_tracks.tracks[loaded_tracks.info.selected_track]
             player_ctx.queue(track)
-
+            # si hay url, la pone en el mensaje de la información de la canción cuando empieza la canción
             if track.info.uri:
                 await ctx.respond(
                     ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
                         track.info.author, track.info.title, track.info.uri)
                 )
+            # si no hay url, entonces se pone la información sin la url
             else:
                 await ctx.respond(
                     ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
                         track.info.author, track.info.title, track.info.uri)
                 )
+        # este else es para cuando se envia el enlace de una playlist
         else:
+            # se añade la playlist a la cola
             player_ctx.set_queue_append(loaded_tracks.tracks)
             await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_playlist_to_queue.response").format(
                 loaded_tracks.info.name))
 
     # Error or no results
+    # el else sale si hay un error o no se encuentran resultados
     else:
         try:
+            # se busca la query en yt-dlp
             await play_yt_dlp(query, ctx, player_ctx, has_joined)
+        # el except sale cuando la aplicación no soporta el url que se está dando
         except yt_dlp.UnsupportedUrl:
             await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.url_not_supported"))
+        # este except sale cuando hay un error distinto
         except Exception as e:
             logging.error(e)
             await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "error.response"))
         return None
-
+    # VOY POR AQUI
     await try_play(player_ctx, has_joined)
     return None
 
