@@ -49,13 +49,14 @@ class Events(lavalink_rs.EventHandler):
             await data[1].rest.create_message(
                 data[0],
                 data[1].d.localizer.get_text(data[2], "event.track_start_url.response").format(
-                    event.track.info.author, event.track.info.title, event.track.info.uri),
+                    event.track.info.author, event.track.info.title, event.track.info.uri,
+                    event.track.user_data['requester_id']),
             )
         else:
             await data[1].rest.create_message(
                 data[0],
                 data[1].bot.d.localizer.get_text(data[2], "event.track_start_no_url.response").format(
-                    event.track.info.author, event.track.info.title),
+                    event.track.info.author, event.track.info.title, event.track.user_data['requester_id']),
             )
 
         if client.data and event.guild_id in client.data:

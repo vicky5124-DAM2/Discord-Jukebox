@@ -1,7 +1,10 @@
 import asyncio
+import sys
+import traceback
 from pprint import pprint
 
 from lavalink_rs import PlayerContext
+from lavalink_rs.model.search import SearchEngines
 
 from lavalink_voice import LavalinkVoice
 
@@ -13,7 +16,7 @@ import yt_dlp
 import lightbulb
 from hikari import GatewayBot
 from lightbulb import Plugin, Context
-from lavalink_rs.model.track import TrackData, PlaylistData
+from lavalink_rs.model.track import TrackData, PlaylistData, TrackLoadType
 
 plugin = Plugin("Music (basic) commands")
 plugin.add_checks(lightbulb.guild_only)
@@ -198,20 +201,22 @@ async def play(ctx: Context) -> None:
 
     # si no es una url, el bot buscará el argumento indicado por el usuario en youtube
     if not query.startswith("http"):
-        query = f"spsearch:{query}"
+        query = SearchEngines.spotify(query)
 
     try:
         # loaded_tracks son los resultados de la busqueda del bot o del url
-        loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, query)
+        tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, query)
+        loaded_tracks = tracks.data
     # si loaded_tracks está vacío, entonces la excepción buscará la query en yt_dlp
     except Exception as e:
         try:
             await play_yt_dlp(query, ctx, player_ctx, has_joined)
         # si la aplicación no soporta la url entonces saldrá una excepción con un mensaje anunciandolo
-        except yt_dlp.UnsupportedUrl:
-            await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.url_not_supported"))
+        #except yt_dlp.UnsupportedUrl:
+        #    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.url_not_supported"))
         except Exception as e:
             # logging.error son mensajes que salen cuando corres la aplicación
+            traceback.print_exception(type(e), e, e.__traceback__, file=sys.stderr)
             logging.error(e)
             await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "error.response"))
         return None
@@ -219,7 +224,8 @@ async def play(ctx: Context) -> None:
     # Single track
     # este if mira si el resultado de la query hay resultados, si es una canción, una playlist, si está vacío o si
     # hay un error
-    if isinstance(loaded_tracks, TrackData):
+    if tracks.load_type == TrackLoadType.Track:
+        loaded_tracks.user_data = {"requester_id": int(ctx.author.id)}
         player_ctx.queue(loaded_tracks)
         # si hay url, la pone en el mensaje de la información de la canción cuando empieza la canción
         if loaded_tracks.info.uri:
@@ -236,7 +242,8 @@ async def play(ctx: Context) -> None:
 
     # Search results
     # este elif coge el primer resultado de la busqueda de la query (cuando no se pone un enlace de música)
-    elif isinstance(loaded_tracks, list):
+    elif tracks.load_type == TrackLoadType.Search:
+        loaded_tracks[0].user_data = {"requester_id": int(ctx.author.id)}
         player_ctx.queue(loaded_tracks[0])
         # si hay url, la pone en el mensaje de la información de la canción cuando empieza la canción
         if loaded_tracks[0].info.uri:
@@ -253,11 +260,12 @@ async def play(ctx: Context) -> None:
 
     # Playlist
     # se llega a este elif cuando pones una playlist en la query
-    elif isinstance(loaded_tracks, PlaylistData):
+    elif tracks.load_type == TrackLoadType.Playlist:
         # en este if se pone la información del video del enlace (que está dentro de una playlist)
         if loaded_tracks.info.selected_track:
             # se añade la playlist a la cola con el video del enlace en primer lugar
             track = loaded_tracks.tracks[loaded_tracks.info.selected_track]
+            track.user_data = {"requester_id": int(ctx.author.id)}
             player_ctx.queue(track)
             # si hay url, la pone en el mensaje de la información de la canción cuando empieza la canción
             if track.info.uri:
@@ -273,6 +281,8 @@ async def play(ctx: Context) -> None:
                 )
         # este else es para cuando se envia el enlace de una playlist
         else:
+            for i in tracks:
+                i.user_data = {"requester_id": int(ctx.author.id)}
             # se añade la playlist a la cola
             player_ctx.set_queue_append(loaded_tracks.tracks)
             await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_playlist_to_queue.response").format(
@@ -292,12 +302,14 @@ async def play(ctx: Context) -> None:
             logging.error(e)
             await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "error.response"))
         return None
-    # VOY POR AQUI
+    # try_play reproduce la canción cuando es la primera vez que usas el comando !play
     await try_play(player_ctx, has_joined)
     return None
 
 
 async def play_yt_dlp(query: str, ctx: Context, player_ctx: PlayerContext, has_joined: bool):
+    # el query.replace cambia la busqueda de spotify por la de youtube
+    query = query.replace("spsearch", "ytsearch")
     # si no encuentra resultados con la busqueda en spotify...
     # el bot buscará en yt-dlp
     ytdl_query = {}
@@ -310,16 +322,19 @@ async def play_yt_dlp(query: str, ctx: Context, player_ctx: PlayerContext, has_j
     loop = asyncio.get_event_loop()
 
     ytdl_query = await loop.run_in_executor(None, extract)
+    print(ytdl_query["url"])
 
-    loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, ytdl_query["url"])
-    if not isinstance(loaded_tracks, TrackData):
+    tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, ytdl_query["url"])
+    loaded_tracks = tracks.data
+    if tracks.load_type == TrackLoadType.Track:
         valid = []
         for i in ytdl_query["formats"]:
             if not i.get("filesize_approx"):
                 valid.append(i["url"])
-        loaded_tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, valid[-1])
+        tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, valid[-1])
+        loaded_tracks = tracks.data
 
-    if not isinstance(loaded_tracks, TrackData):  # tracks is empty
+    if tracks.load_type == TrackLoadType.Track:  # tracks is empty
         raise Exception("Invalid API response")
 
     info = loaded_tracks.info
@@ -329,7 +344,7 @@ async def play_yt_dlp(query: str, ctx: Context, player_ctx: PlayerContext, has_j
     info.uri = ytdl_query.get("original_url")
 
     loaded_tracks.info = info
-
+    loaded_tracks.user_data = {"requester_id": int(ctx.author.id)}
     player_ctx.queue(loaded_tracks)
 
     if loaded_tracks.info.uri:
@@ -342,6 +357,7 @@ async def play_yt_dlp(query: str, ctx: Context, player_ctx: PlayerContext, has_j
             ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
                 loaded_tracks.info.author, loaded_tracks.info.title)
         )
+    # try_play reproduce la canción cuando es la primera vez que usas el comando !play
     await try_play(player_ctx, has_joined)
     return None
 

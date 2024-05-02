@@ -54,6 +54,7 @@
     "error.response": "Error",
     "cmd.play.url_not_supported": "URL no soportada",
 
-    "event.track_start_url.response": "Iniciada la reproducción de [`{0} - {1}`](<{2}>)",
-    "event.track_start_no_url.response": "Iniciada de reproducción de `{0} - {1}`"
+    "event.track_start_url.response": "Iniciada la reproducción de [`{0} - {1}`](<{2}>) | Pedido por <@!{3}>",
+    "event.track_start_no_url.response": "Iniciada de reproducción de `{0} - {1}` | Pedido por <@!{3}>",
+    "cmd.queue.queue_text_info_url.response": "{0} -> [`{1} - {2}`](<{3}>), Pedido por <@!{4}>\\n"}
 }

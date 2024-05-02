@@ -54,6 +54,6 @@
     "error.response": "Error",
     "cmd.play.url_not_supported": "URL not supported",
 
-    "event.track_start_url.response": "Started playing [`{0} - {1}`](<{2}>)",
-    "event.track_start_no_url.response": "Started playing `{0} - {1}`"
-}
+    "event.track_start_url.response": "Started playing [`{0} - {1}`](<{2}>) | Requested by <@!{3}>",
+    "event.track_start_no_url.response": "Started playing `{0} - {1}` | Requested by <@!{3}>",
+    "cmd.queue.queue_text_info_url.response": "{0} -> [`{1} - {2}`](<{3}>), Requested by <@!{4}>\\n"}

@@ -214,7 +214,10 @@ async def queue(ctx: Context) -> None:
             break
 
         if i.track.info.uri:
-            queue_text += f"{idx + 1} -> [`{i.track.info.author} - {i.track.info.title}`](<{i.track.info.uri}>)\n"
+            queue_text += ctx.bot.d.localizer.get_text(ctx, "cmd.queue.queue_text_info_url.response").format(idx + 1,
+                                                                                                             i.track.info.author,
+                                                                                                             i.track.info.title,
+                                                                                                             i.track.info.uri)
         else:
             queue_text += (
                 f"{idx + 1} -> `{i.track.info.author} - {i.track.info.title}`\n"
@@ -276,7 +279,7 @@ async def remove(ctx: Context) -> None:
         )
     else:
         await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.remove.removed_url.response").format(
-                track.info.author, track.info.title))
+            track.info.author, track.info.title))
     # el indice de la cola se reduce en uno
     voice.player_ctx.set_queue_remove(ctx.options.index - 1)
 
