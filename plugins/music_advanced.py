@@ -201,12 +201,14 @@ async def queue(ctx: Context) -> None:
 
         if player.track.info.uri:
             now_playing = ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_url.response").format(
-                player.track.info.author, player.track.info.title, player.track.info.uri, time, time_true_s)
+                player.track.info.author, player.track.info.title, player.track.info.uri, time, time_true_s,
+                player.track.user_data['requester_id'])
         else:
             now_playing = ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_no_url.response").format(
-                player.track.info.author, player.track.info.title, time, time_true_s)
+                player.track.info.author, player.track.info.title, time, time_true_s,
+                player.track.user_data['requester_id'])
     # queue es la lista de canciones que hay en la cola
-    queue = await voice.player_ctx.get_queue()
+    queue = await voice.player_ctx.get_queue().get_queue()
     queue_text = ""
     # enumerate enumera el numero de canciones en la cola y su información, el máximo de canciones en la cola es 10
     for idx, i in enumerate(queue):
@@ -214,13 +216,13 @@ async def queue(ctx: Context) -> None:
             break
 
         if i.track.info.uri:
-            queue_text += ctx.bot.d.localizer.get_text(ctx, "cmd.queue.queue_text_info_url.response").format(idx + 1,
-                                                                                                             i.track.info.author,
-                                                                                                             i.track.info.title,
-                                                                                                             i.track.info.uri)
+            queue_text += ctx.bot.d.localizer.get_text(ctx, "cmd.queue.queue_text_info_url.response").format(
+                idx + 1, i.track.info.author, i.track.info.title, i.track.info.uri,
+                player.track.user_data['requester_id'])
         else:
             queue_text += (
-                f"{idx + 1} -> `{i.track.info.author} - {i.track.info.title}`\n"
+                ctx.bot.d.localizer.get_text(ctx, "cmd.queue.queue_text_info_no_url.response").format(
+                    idx + 1, i.track.info.author, i.track.info.title, player.track.user_data['requester_id'])
             )
 
     if not queue_text:
@@ -263,7 +265,7 @@ async def remove(ctx: Context) -> None:
 
     assert isinstance(voice, LavalinkVoice)
 
-    queue = await voice.player_ctx.get_queue()
+    queue = await voice.player_ctx.get_queue().get_queue()
     # si el indice indicado por el usuario es mayor a la longitud de la cola, saldrá este mensaje
     if ctx.options.index > len(queue):
         await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.remove.index_out_range.response"))
@@ -275,11 +277,11 @@ async def remove(ctx: Context) -> None:
     if track.info.uri:
         await ctx.respond(
             ctx.bot.d.localizer.get_text(ctx, "cmd.remove.removed_url.response").format(
-                track.info.author, track.info.title, track.info.uri)
+                track.info.author, track.info.title, track.info.uri, track.user_data['requester_id'])
         )
     else:
         await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.remove.removed_url.response").format(
-            track.info.author, track.info.title))
+            track.info.author, track.info.title), track.user_data['requester_id'])
     # el indice de la cola se reduce en uno
     voice.player_ctx.set_queue_remove(ctx.options.index - 1)
 
@@ -306,7 +308,7 @@ async def clear(ctx: Context) -> None:
 
     assert isinstance(voice, LavalinkVoice)
 
-    queue = await voice.player_ctx.get_queue()
+    queue = await voice.player_ctx.get_queue().get_queue()
 
     if not queue:
         await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.clear.queue_empty.response"))
@@ -358,7 +360,7 @@ async def swap(ctx: Context) -> None:
 
     assert isinstance(voice, LavalinkVoice)
 
-    queue = await voice.player_ctx.get_queue()
+    queue = await voice.player_ctx.get_queue().get_queue()
     # mira si el indice indicado por el usuario es mayor a la longitud de la cola
     if ctx.options.index1 > len(queue):
         await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.swap.index1_out_range.response"))
@@ -419,7 +421,7 @@ async def shuffle(ctx: Context) -> None:
 
     assert isinstance(voice, LavalinkVoice)
 
-    queue = await voice.player_ctx.get_queue()
+    queue = await voice.player_ctx.get_queue().get_queue()
     # se mezclan los indices de la cola
     random.shuffle(queue)
     # da la cola modificada a voice

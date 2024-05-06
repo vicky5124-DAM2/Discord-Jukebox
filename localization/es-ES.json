@@ -29,11 +29,11 @@
     "cmd.resume.resumed_no_url.response": "Continuado: `{0} - {1}`",
     "cmd.seek.seeked_url.response": "Buscado: [`{0} - {1}`](<{2}>)",
     "cmd.seek.seeked_no_url.response": "Buscado: `{0} - {1}`",
-    "cmd.queue.now_playing_url.response": "[`{0} - {1}`](<{2}>) | {3} (Segundo {4})",
-    "cmd.queue.now_playing_no_url.response": "`{0} - {1}` | {2} (Segundo {3})",
+    "cmd.queue.now_playing_url.response": "[`{0} - {1}`](<{2}>) | {3} (Segundo {4}), Pedido por <@!{5}>",
+    "cmd.queue.now_playing_no_url.response": "`{0} - {1}` | {2} (Segundo {3}), Pedido por <@!{4}>",
     "cmd.queue.now_playing_queue.response": "Reproduciendo ahora: {0}\n\n{1}",
-    "cmd.remove.removed_url.response": "Quitado de la cola: [`{0} - {1}`](<{2}>)",
-    "cmd.remove.removed_no_url.response": "Quitado de la cola: `{0} - {1}`",
+    "cmd.remove.removed_url.response": "Quitado de la cola: [`{0} - {1}`](<{2}>, Pedido por <@!{4}>)",
+    "cmd.remove.removed_no_url.response": "Quitado de la cola: `{0} - {1}`, Pedido por <@!{3}>",
     "cmd.swap.swapped.response": "Intercambiado {0} por {1}",
     "cmd.loop_start.starting_loop_url.response": "Iniciando el bucle en la canción: [`{0} - {1}`](<{2}>)",
     "cmd.loop_start.starting_loop_no_url.response": "Iniciando el bucle en la canción: `{0} - {1}`",
@@ -56,5 +56,6 @@
 
     "event.track_start_url.response": "Iniciada la reproducción de [`{0} - {1}`](<{2}>) | Pedido por <@!{3}>",
     "event.track_start_no_url.response": "Iniciada de reproducción de `{0} - {1}` | Pedido por <@!{3}>",
-    "cmd.queue.queue_text_info_url.response": "{0} -> [`{1} - {2}`](<{3}>), Pedido por <@!{4}>\\n"}
+    "cmd.queue.queue_text_info_url.response": "{0} -> [`{1} - {2}`](<{3}>), Pedido por <@!{4}>\\n",
+    "cmd.queue.queue_text_info_no_url.response": "{0} -> `{1} - {2}`, Pedido por <@!{3}>\\n"
 }

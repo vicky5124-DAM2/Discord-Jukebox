@@ -281,10 +281,12 @@ async def play(ctx: Context) -> None:
                 )
         # este else es para cuando se envia el enlace de una playlist
         else:
+            tracks = loaded_tracks.tracks
             for i in tracks:
                 i.user_data = {"requester_id": int(ctx.author.id)}
             # se añade la playlist a la cola
-            player_ctx.set_queue_append(loaded_tracks.tracks)
+            queue = player_ctx.get_queue()
+            queue.append(tracks)
             await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_playlist_to_queue.response").format(
                 loaded_tracks.info.name))
 

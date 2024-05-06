@@ -29,11 +29,11 @@
     "cmd.resume.resumed_no_url.response": "Resumed: `{0} - {1}`",
     "cmd.seek.seeked_url.response": "Seeked: [`{0} - {1}`](<{2}>)",
     "cmd.seek.seeked_no_url.response": "Seeked: `{0} - {1}`",
-    "cmd.queue.now_playing_url.response": "[`{0} - {1}`](<{2}>) | {3} (Second {4})",
-    "cmd.queue.now_playing_no_url.response": "`{0} - {1}` | {2} (Second {3})",
+    "cmd.queue.now_playing_url.response": "[`{0} - {1}`](<{2}>) | {3} (Second {4}), Requested by <@!{5}>",
+    "cmd.queue.now_playing_no_url.response": "`{0} - {1}` | {2} (Second {3}), Requested by <@!{4}>",
     "cmd.queue.now_playing_queue.response": "Now playing: {0}\n\n{1}",
-    "cmd.remove.removed_url.response": "Removed: [`{0} - {1}`](<{2}>)",
-    "cmd.remove.removed_no_url.response": "Removed: `{0} - {1}`",
+    "cmd.remove.removed_url.response": "Removed: [`{0} - {1}`](<{2}>), Requested by <@!{3}>",
+    "cmd.remove.removed_no_url.response": "Removed: `{0} - {1}`, Requested by <@!{3}>",
     "cmd.swap.swapped.response": "Swapped {0} with {1}",
     "cmd.loop_start.starting_loop_url.response": "Starting the loop on track: [`{0} - {1}`](<{2}>)",
     "cmd.loop_start.starting_loop_no_url.response": "Starting the loop on track: `{0} - {1}`",
@@ -56,4 +56,6 @@
 
     "event.track_start_url.response": "Started playing [`{0} - {1}`](<{2}>) | Requested by <@!{3}>",
     "event.track_start_no_url.response": "Started playing `{0} - {1}` | Requested by <@!{3}>",
-    "cmd.queue.queue_text_info_url.response": "{0} -> [`{1} - {2}`](<{3}>), Requested by <@!{4}>\\n"}
+    "cmd.queue.queue_text_info_url.response": "{0} -> [`{1} - {2}`](<{3}>), Requested by <@!{4}>\\n",
+    "cmd.queue.queue_text_info_no_url.response": "{0} -> `{1} - {2}`, Requested by <@!{3}>\\n"
+}
