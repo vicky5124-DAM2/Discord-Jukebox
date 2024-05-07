@@ -383,10 +383,14 @@ async def swap(ctx: Context) -> None:
     queue[ctx.options.index1 - 1] = track2
     queue[ctx.options.index2 - 1] = track1
     # da la cola modificada a voice
-    voice.player_ctx.set_queue_replace(queue)
+    queue_ref = voice.player_ctx.get_queue()
+    queue_ref.replace(queue)
 
     if track1.track.info.uri:
-        track1_text = f"[`{track1.track.info.author} - {track1.track.info.title}`](<{track1.track.info.uri}>)"
+        track1_text = ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.swap.track_info_url.response").format(
+            track1.track.info.author, track1.track.info.title, track1.track.info.uri,
+            track1.track.user_data['requester_id']))
+        # track1_text = f"[`{track1.track.info.author} - {track1.track.info.title}`](<{track1.track.info.uri}>)"
     else:
         track1_text = f"`{track1.track.info.author} - {track1.track.info.title}`"
 

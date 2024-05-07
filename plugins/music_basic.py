@@ -183,7 +183,7 @@ async def play(ctx: Context) -> None:
     if not ctx.options.query:
         player = await player_ctx.get_player()
         # si no hay ninguna canción reproduciendose y hay canciones en la cola...
-        if not player.track and await player_ctx.get_queue():
+        if not player.track and await player_ctx.get_queue().get_queue():
             # el bot hará un /skip para reproducir la siguiente canción
             player_ctx.skip()
         else:
@@ -212,7 +212,7 @@ async def play(ctx: Context) -> None:
         try:
             await play_yt_dlp(query, ctx, player_ctx, has_joined)
         # si la aplicación no soporta la url entonces saldrá una excepción con un mensaje anunciandolo
-        #except yt_dlp.UnsupportedUrl:
+        # except yt_dlp.UnsupportedUrl:
         #    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.url_not_supported"))
         except Exception as e:
             # logging.error son mensajes que salen cuando corres la aplicación
@@ -368,7 +368,7 @@ async def try_play(player_ctx: PlayerContext, has_joined: bool):
     player_data = await player_ctx.get_player()
 
     if player_data:
-        if not player_data.track and await player_ctx.get_queue() and not has_joined:
+        if not player_data.track and await player_ctx.get_queue().get_queue() and not has_joined:
             player_ctx.skip()
 
 
