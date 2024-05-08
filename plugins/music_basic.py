@@ -94,7 +94,7 @@ async def _join(ctx: Context) -> t.Optional[hikari.Snowflake]:
     name_localizations={hikari.Locale.ES_ES: "unir"},
     description_localizations={
         hikari.Locale.ES_ES: "Entra el canal de voz al que estás conectado, "
-                             "o al especificado en el comando"
+        "o al especificado en el comando"
     },
 )
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)
@@ -103,7 +103,11 @@ async def join(ctx: Context) -> None:
     channel_id = await _join(ctx)
 
     if channel_id:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.join.channel_id.response").format(channel_id))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.join.channel_id.response").format(
+                channel_id
+            )
+        )
     else:
         await ctx.respond(
             ctx.bot.d.localizer.get_text(ctx, "cmd.join.please_join_channel.response")
@@ -127,12 +131,16 @@ async def leave(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
     # si no está en ningún canal, el bot introducirá un mensaje diciendolo
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
     # el bot se desconecta del canal
     await voice.disconnect()
 
-    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.leave.left_channel.response"))
+    await ctx.respond(
+        ctx.bot.d.localizer.get_text(ctx, "cmd.leave.left_channel.response")
+    )
 
 
 @plugin.command()
@@ -153,7 +161,7 @@ async def leave(ctx: Context) -> None:
     name_localizations={hikari.Locale.ES_ES: "reproducir"},
     description_localizations={
         hikari.Locale.ES_ES: "Busca la consulta en Spotify y agrega el primer resultado a la "
-                             "cola, o agrega la URL a la cola"
+        "cola, o agrega la URL a la cola"
     },
 )
 @lightbulb.implements(
@@ -169,7 +177,11 @@ async def play(ctx: Context) -> None:
 
     if not voice:
         if not await _join(ctx):
-            await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.join_please_join_channel.response"))
+            await ctx.respond(
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.play.join_please_join_channel.response"
+                )
+            )
             return None
         voice = ctx.bot.voice.connections.get(ctx.guild_id)
         has_joined = True
@@ -189,10 +201,16 @@ async def play(ctx: Context) -> None:
         else:
             # si ya hay una canción, entonces el bot pondrá un mensaje
             if player.track:
-                await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.song_already_playing.response"))
+                await ctx.respond(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "cmd.play.song_already_playing.response"
+                    )
+                )
             # y si no hay ninguna canción en la cola, el bot pondrá otro mensaje
             else:
-                await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.empty_queue.response"))
+                await ctx.respond(
+                    ctx.bot.d.localizer.get_text(ctx, "cmd.play.empty_queue.response")
+                )
 
         return None
 
@@ -230,14 +248,20 @@ async def play(ctx: Context) -> None:
         # si hay url, la pone en el mensaje de la información de la canción cuando empieza la canción
         if loaded_tracks.info.uri:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
-                    loaded_tracks.info.author, loaded_tracks.info.title, loaded_tracks.info.uri)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.play.added_to_queue_url.response"
+                ).format(
+                    loaded_tracks.info.author,
+                    loaded_tracks.info.title,
+                    loaded_tracks.info.uri,
+                )
             )
         # si no, pone el mensaje sin la url
         else:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
-                    loaded_tracks.info.author, loaded_tracks.info.title)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.play.added_to_queue_no_url.response"
+                ).format(loaded_tracks.info.author, loaded_tracks.info.title)
             )
 
     # Search results
@@ -248,14 +272,20 @@ async def play(ctx: Context) -> None:
         # si hay url, la pone en el mensaje de la información de la canción cuando empieza la canción
         if loaded_tracks[0].info.uri:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
-                    loaded_tracks[0].info.author, loaded_tracks[0].info.title, loaded_tracks[0].info.uri)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.play.added_to_queue_url.response"
+                ).format(
+                    loaded_tracks[0].info.author,
+                    loaded_tracks[0].info.title,
+                    loaded_tracks[0].info.uri,
+                )
             )
         # si no, pone el mensaje sin la url
         else:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
-                    loaded_tracks[0].info.author, loaded_tracks[0].info.title)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.play.added_to_queue_no_url.response"
+                ).format(loaded_tracks[0].info.author, loaded_tracks[0].info.title)
             )
 
     # Playlist
@@ -270,14 +300,16 @@ async def play(ctx: Context) -> None:
             # si hay url, la pone en el mensaje de la información de la canción cuando empieza la canción
             if track.info.uri:
                 await ctx.respond(
-                    ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
-                        track.info.author, track.info.title, track.info.uri)
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "cmd.play.added_to_queue_url.response"
+                    ).format(track.info.author, track.info.title, track.info.uri)
                 )
             # si no hay url, entonces se pone la información sin la url
             else:
                 await ctx.respond(
-                    ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
-                        track.info.author, track.info.title, track.info.uri)
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "cmd.play.added_to_queue_url.response"
+                    ).format(track.info.author, track.info.title, track.info.uri)
                 )
         # este else es para cuando se envia el enlace de una playlist
         else:
@@ -287,8 +319,11 @@ async def play(ctx: Context) -> None:
             # se añade la playlist a la cola
             queue = player_ctx.get_queue()
             queue.append(tracks)
-            await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_playlist_to_queue.response").format(
-                loaded_tracks.info.name))
+            await ctx.respond(
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.play.added_playlist_to_queue.response"
+                ).format(loaded_tracks.info.name)
+            )
 
     # Error or no results
     # el else sale si hay un error o no se encuentran resultados
@@ -298,7 +333,9 @@ async def play(ctx: Context) -> None:
             await play_yt_dlp(query, ctx, player_ctx, has_joined)
         # el except sale cuando la aplicación no soporta el url que se está dando
         except yt_dlp.UnsupportedUrl:
-            await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.play.url_not_supported"))
+            await ctx.respond(
+                ctx.bot.d.localizer.get_text(ctx, "cmd.play.url_not_supported")
+            )
         # este except sale cuando hay un error distinto
         except Exception as e:
             logging.error(e)
@@ -309,7 +346,9 @@ async def play(ctx: Context) -> None:
     return None
 
 
-async def play_yt_dlp(query: str, ctx: Context, player_ctx: PlayerContext, has_joined: bool):
+async def play_yt_dlp(
+    query: str, ctx: Context, player_ctx: PlayerContext, has_joined: bool
+):
     # el query.replace cambia la busqueda de spotify por la de youtube
     query = query.replace("spsearch", "ytsearch")
     # si no encuentra resultados con la busqueda en spotify...
@@ -341,8 +380,12 @@ async def play_yt_dlp(query: str, ctx: Context, player_ctx: PlayerContext, has_j
 
     info = loaded_tracks.info
 
-    info.title = ytdl_query.get("title") or ctx.bot.d.localizer.get_text(ctx, "cmd.play.yt-dlp.unknown_title")
-    info.author = ytdl_query.get("uploader") or ctx.bot.d.localizer.get_text(ctx, "cmd.play.yt-dlp.unknown_artist")
+    info.title = ytdl_query.get("title") or ctx.bot.d.localizer.get_text(
+        ctx, "cmd.play.yt-dlp.unknown_title"
+    )
+    info.author = ytdl_query.get("uploader") or ctx.bot.d.localizer.get_text(
+        ctx, "cmd.play.yt-dlp.unknown_artist"
+    )
     info.uri = ytdl_query.get("original_url")
 
     loaded_tracks.info = info
@@ -351,13 +394,19 @@ async def play_yt_dlp(query: str, ctx: Context, player_ctx: PlayerContext, has_j
 
     if loaded_tracks.info.uri:
         await ctx.respond(
-            ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_url.response").format(
-                loaded_tracks.info.author, loaded_tracks.info.title, loaded_tracks.info.uri)
+            ctx.bot.d.localizer.get_text(
+                ctx, "cmd.play.added_to_queue_url.response"
+            ).format(
+                loaded_tracks.info.author,
+                loaded_tracks.info.title,
+                loaded_tracks.info.uri,
+            )
         )
     else:
         await ctx.respond(
-            ctx.bot.d.localizer.get_text(ctx, "cmd.play.added_to_queue_no_url.response").format(
-                loaded_tracks.info.author, loaded_tracks.info.title)
+            ctx.bot.d.localizer.get_text(
+                ctx, "cmd.play.added_to_queue_no_url.response"
+            ).format(loaded_tracks.info.author, loaded_tracks.info.title)
         )
     # try_play reproduce la canción cuando es la primera vez que usas el comando !play
     await try_play(player_ctx, has_joined)
@@ -368,7 +417,11 @@ async def try_play(player_ctx: PlayerContext, has_joined: bool):
     player_data = await player_ctx.get_player()
 
     if player_data:
-        if not player_data.track and await player_ctx.get_queue().get_queue() and not has_joined:
+        if (
+            not player_data.track
+            and await player_ctx.get_queue().get_queue()
+            and not has_joined
+        ):
             player_ctx.skip()
 
 
@@ -391,7 +444,9 @@ async def skip(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
@@ -402,20 +457,27 @@ async def skip(ctx: Context) -> None:
     if player.track:
         if player.track.info.uri:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.skip.skipped_url.response").format(player.track.info.author,
-                                                                                          player.track.info.title,
-                                                                                          player.track.info.uri)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.skip.skipped_url.response"
+                ).format(
+                    player.track.info.author,
+                    player.track.info.title,
+                    player.track.info.uri,
+                )
             )
         else:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.skip.skipped_no_url.response").format(player.track.info.author,
-                                                                                             player.track.info.title)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.skip.skipped_no_url.response"
+                ).format(player.track.info.author, player.track.info.title)
             )
         # el bot salta a la siguiente canción en la cola
         voice.player_ctx.skip()
     # si no hay ninguna canción reproduciendose entonces pondrá un mensaje diciendolo
     else:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.skip.nothing_skip.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.skip.nothing_skip.response")
+        )
 
 
 @plugin.command()
@@ -437,7 +499,9 @@ async def stop(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
@@ -448,19 +512,26 @@ async def stop(ctx: Context) -> None:
     if player.track:
         if player.track.info.uri:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.stop.stopped_url.response").format(player.track.info.author,
-                                                                                          player.track.info.title,
-                                                                                          player.track.info.uri)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.stop.stopped_url.response"
+                ).format(
+                    player.track.info.author,
+                    player.track.info.title,
+                    player.track.info.uri,
+                )
             )
         else:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.stop.stopped_no_url.response").format(player.track.info.author,
-                                                                                             player.track.info.title)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.stop.stopped_no_url.response"
+                ).format(player.track.info.author, player.track.info.title)
             )
         # para la canción
         await voice.player_ctx.stop_now()
     else:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.stop.nothing_stop.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.stop.nothing_stop.response")
+        )
 
 
 def load(bot: GatewayBot) -> None:

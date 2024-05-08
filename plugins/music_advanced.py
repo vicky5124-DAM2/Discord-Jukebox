@@ -31,7 +31,9 @@ async def pause(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
@@ -42,19 +44,35 @@ async def pause(ctx: Context) -> None:
         # este if mira si hay una uri
         if player.track.info.uri:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.pause.paused_url.response").format(player.track.info.author,
-                                                                                          player.track.info.title,
-                                                                                          player.track.info.uri)
+                ctx.bot.d.localizer.get_text(ctx, "cmd.pause.paused.response").format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_url"
+                    ).format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.info.uri,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
         else:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.pause.paused_no_url.response").format(player.track.info.author,
-                                                                                             player.track.info.title)
+                ctx.bot.d.localizer.get_text(ctx, "cmd.pause.paused.response").format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_no_url"
+                    ).format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
         # este await pausa la cancion
         await voice.player_ctx.set_pause(True)
     else:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.pause.nothing_pause.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.pause.nothing_pause.response")
+        )
 
 
 @plugin.command()
@@ -76,7 +94,9 @@ async def resume(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
     # si voice es nulo estonces el bot no está conectado a un canal de voz
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
@@ -87,20 +107,36 @@ async def resume(ctx: Context) -> None:
         # este if mira si la canción tiene un url, si lo tiene saldrá en el mensaje del bot
         if player.track.info.uri:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.resume.resumed_url.response").format(player.track.info.author,
-                                                                                            player.track.info.title,
-                                                                                            player.track.info.uri)
+                ctx.bot.d.localizer.get_text(ctx, "cmd.resume.resumed.response").format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_url"
+                    ).format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.info.uri,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
         else:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.resume.resumed_no_url.response").format(
-                    player.track.info.author, player.track.info.title)
+                ctx.bot.d.localizer.get_text(ctx, "cmd.resume.resumed.response").format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_no_url"
+                    ).format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
         # el bot continua la canción
         await voice.player_ctx.set_pause(False)
     else:
         # el reproductor no tiene nignuna canción asi que no hay nada que continuar
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.resume.nothing_resume.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.resume.nothing_resume.response")
+        )
 
 
 @plugin.command()
@@ -131,7 +167,9 @@ async def seek(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
     # si voice es nulo estonces el bot no está conectado a un canal de voz
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
     # isinstance mira si voice es una instancia de LavalinkVoice
     assert isinstance(voice, LavalinkVoice)
@@ -142,20 +180,36 @@ async def seek(ctx: Context) -> None:
         # este if mira si la canción tiene un url, si lo tiene saldrá en el mensaje del bot
         if player.track.info.uri:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.seek.seeked_url.response").format(player.track.info.author,
-                                                                                         player.track.info.title,
-                                                                                         player.track.info.uri)
+                ctx.bot.d.localizer.get_text(ctx, "cmd.seek.seeked.response").format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_url"
+                    ).format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.info.uri,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
         else:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.seek.seeked_no_url.response").format(player.track.info.author,
-                                                                                            player.track.info.title)
+                ctx.bot.d.localizer.get_text(ctx, "cmd.seek.seeked.response").format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_no_url"
+                    ).format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
         # el bot continua la canción en los segundos indicados multiplicados por 1000 (milisegundos)
         await voice.player_ctx.set_position_ms(ctx.options.seconds * 1000)
     else:
         # si no hay ninguna canción en el reproductor pone este mensaje
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.seek.nothing_seek.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.seek.nothing_seek.response")
+        )
 
 
 @plugin.command()
@@ -175,7 +229,9 @@ async def queue(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
     # si voice es nulo estonces el bot no está conectado a un canal de voz
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -200,13 +256,26 @@ async def queue(ctx: Context) -> None:
             time = f"{time_m:02}:{time_s:02}"
 
         if player.track.info.uri:
-            now_playing = ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_url.response").format(
-                player.track.info.author, player.track.info.title, player.track.info.uri, time, time_true_s,
-                player.track.user_data['requester_id'])
+            now_playing = ctx.bot.d.localizer.get_text(
+                ctx, "cmd.queue.now_playing_url.response"
+            ).format(
+                player.track.info.author,
+                player.track.info.title,
+                player.track.info.uri,
+                time,
+                time_true_s,
+                player.track.user_data["requester_id"],
+            )
         else:
-            now_playing = ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_no_url.response").format(
-                player.track.info.author, player.track.info.title, time, time_true_s,
-                player.track.user_data['requester_id'])
+            now_playing = ctx.bot.d.localizer.get_text(
+                ctx, "cmd.queue.now_playing_no_url.response"
+            ).format(
+                player.track.info.author,
+                player.track.info.title,
+                time,
+                time_true_s,
+                player.track.user_data["requester_id"],
+            )
     # queue es la lista de canciones que hay en la cola
     queue = await voice.player_ctx.get_queue().get_queue()
     queue_text = ""
@@ -216,20 +285,37 @@ async def queue(ctx: Context) -> None:
             break
 
         if i.track.info.uri:
-            queue_text += ctx.bot.d.localizer.get_text(ctx, "cmd.queue.queue_text_info_url.response").format(
-                idx + 1, i.track.info.author, i.track.info.title, i.track.info.uri,
-                player.track.user_data['requester_id'])
+            queue_text += ctx.bot.d.localizer.get_text(
+                ctx, "cmd.queue.queue_text_info.response"
+            ).format(
+                idx + 1,
+                ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
+                    i.track.info.author,
+                    i.track.info.title,
+                    i.track.info.uri,
+                    player.track.user_data["requester_id"],
+                ),
+            )
         else:
-            queue_text += (
-                ctx.bot.d.localizer.get_text(ctx, "cmd.queue.queue_text_info_no_url.response").format(
-                    idx + 1, i.track.info.author, i.track.info.title, player.track.user_data['requester_id'])
+            queue_text += ctx.bot.d.localizer.get_text(
+                ctx, "cmd.queue.queue_text_info.response"
+            ).format(
+                idx + 1,
+                ctx.bot.d.localizer.get_text(ctx, "generic.track_info_no_url").format(
+                    i.track.info.author,
+                    i.track.info.title,
+                    player.track.user_data["requester_id"],
+                ),
             )
 
     if not queue_text:
         queue_text = ctx.bot.d.localizer.get_text(ctx, "cmd.queue.queue_text.response")
 
-    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.queue.now_playing_queue.response").format(
-        now_playing, queue_text.replace("\\n", "\n")))
+    await ctx.respond(
+        ctx.bot.d.localizer.get_text(
+            ctx, "cmd.queue.now_playing_queue.response"
+        ).format(now_playing, queue_text.replace("\\n", "\n"))
+    )
 
 
 @plugin.command()
@@ -260,7 +346,9 @@ async def remove(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -268,22 +356,44 @@ async def remove(ctx: Context) -> None:
     queue = await voice.player_ctx.get_queue().get_queue()
     # si el indice indicado por el usuario es mayor a la longitud de la cola, saldrá este mensaje
     if ctx.options.index > len(queue):
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.remove.index_out_range.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.remove.index_out_range.response")
+        )
         return None
 
     assert isinstance(ctx.options.index, int)
     track = queue[ctx.options.index - 1].track
 
     if track.info.uri:
+
         await ctx.respond(
-            ctx.bot.d.localizer.get_text(ctx, "cmd.remove.removed_url.response").format(
-                track.info.author, track.info.title, track.info.uri, track.user_data['requester_id'])
+            ctx.bot.d.localizer.get_text(ctx, "cmd.remove.removed.response").format(
+                ctx.bot.d.localizer.get_text(
+                    ctx, "generic.track_info_url"
+                ).format(
+                    track.info.author,
+                    track.info.title,
+                    track.info.uri,
+                    track.user_data["requester_id"],
+                )
+            )
         )
     else:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.remove.removed_url.response").format(
-            track.info.author, track.info.title), track.user_data['requester_id'])
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.remove.removed.response").format(
+                ctx.bot.d.localizer.get_text(
+                    ctx, "generic.track_info_no_url"
+                ).format(
+                    track.info.author,
+                    track.info.title,
+                    track.user_data["requester_id"],
+                )
+            )
+        )
     # el indice de la cola se reduce en uno
-    voice.player_ctx.set_queue_remove(ctx.options.index - 1)
+    queue_ref = voice.player_ctx.get_queue()
+    queue_ref.remove(ctx.options.index - 1)
+    # voice.player_ctx.set_queue_remove(ctx.options.index - 1)
 
 
 @plugin.command()
@@ -303,7 +413,9 @@ async def clear(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -311,11 +423,17 @@ async def clear(ctx: Context) -> None:
     queue = await voice.player_ctx.get_queue().get_queue()
 
     if not queue:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.clear.queue_empty.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.clear.queue_empty.response")
+        )
         return None
     # da la cola vacia a voice
-    voice.player_ctx.set_queue_clear()
-    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.clear.queue_cleared.response"))
+    queue_ref = voice.player_ctx.get_queue()
+    queue_ref.clear()
+    # voice.player_ctx.set_queue_clear()
+    await ctx.respond(
+        ctx.bot.d.localizer.get_text(ctx, "cmd.clear.queue_cleared.response")
+    )
 
 
 @plugin.command()
@@ -355,7 +473,9 @@ async def swap(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -363,15 +483,21 @@ async def swap(ctx: Context) -> None:
     queue = await voice.player_ctx.get_queue().get_queue()
     # mira si el indice indicado por el usuario es mayor a la longitud de la cola
     if ctx.options.index1 > len(queue):
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.swap.index1_out_range.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.swap.index1_out_range.response")
+        )
         return None
     # mira si el indice indicado por el usuario es mayor a la longitud de la cola
     if ctx.options.index2 > len(queue):
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.swap.index2_out_range.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.swap.index2_out_range.response")
+        )
         return None
     # mira si los dos indices son el mismo
     if ctx.options.index1 == ctx.options.index2:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.swap.same_indexes.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.swap.same_indexes.response")
+        )
         return None
 
     assert isinstance(ctx.options.index1, int)
@@ -387,20 +513,46 @@ async def swap(ctx: Context) -> None:
     queue_ref.replace(queue)
 
     if track1.track.info.uri:
-        track1_text = ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.swap.track_info_url.response").format(
-            track1.track.info.author, track1.track.info.title, track1.track.info.uri,
-            track1.track.user_data['requester_id']))
-        # track1_text = f"[`{track1.track.info.author} - {track1.track.info.title}`](<{track1.track.info.uri}>)"
+        track1_text = ctx.bot.d.localizer.get_text(
+            ctx, "generic.track_info_url"
+        ).format(
+            track1.track.info.author,
+            track1.track.info.title,
+            track1.track.info.uri,
+            track1.track.user_data["requester_id"],
+        )
     else:
-        track1_text = f"`{track1.track.info.author} - {track1.track.info.title}`"
+        track1_text = ctx.bot.d.localizer.get_text(
+            ctx, "generic.track_info_no_url"
+        ).format(
+            track1.track.info.author,
+            track1.track.info.title,
+            track1.track.user_data["requester_id"],
+        )
 
     if track2.track.info.uri:
-        track2_text = f"[`{track2.track.info.author} - {track2.track.info.title}`](<{track2.track.info.uri}>)"
+        track2_text = ctx.bot.d.localizer.get_text(
+            ctx, "generic.track_info_url"
+        ).format(
+            track2.track.info.author,
+            track2.track.info.title,
+            track2.track.info.uri,
+            track2.track.user_data["requester_id"],
+        )
     else:
-        track2_text = f"`{track2.track.info.author} - {track2.track.info.title}`"
+        track2_text = ctx.bot.d.localizer.get_text(
+            ctx, "generic.track_info_no_url"
+        ).format(
+            track2.track.info.author,
+            track2.track.info.title,
+            track2.track.user_data["requester_id"],
+        )
 
-    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.swap.swapped.response").format(track2_text,
-                                                                                            track1_text))
+    await ctx.respond(
+        ctx.bot.d.localizer.get_text(ctx, "cmd.swap.swapped.response").format(
+            track2_text, track1_text
+        )
+    )
 
 
 @plugin.command()
@@ -420,7 +572,9 @@ async def shuffle(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -429,9 +583,12 @@ async def shuffle(ctx: Context) -> None:
     # se mezclan los indices de la cola
     random.shuffle(queue)
     # da la cola modificada a voice
-    voice.player_ctx.set_queue_replace(queue)
+    queue_ref = voice.player_ctx.get_queue()
+    queue_ref.replace(queue)
 
-    await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.shuffle.queue_shuffled.response"))
+    await ctx.respond(
+        ctx.bot.d.localizer.get_text(ctx, "cmd.shuffle.queue_shuffled.response")
+    )
 
 
 @plugin.command()
@@ -465,7 +622,9 @@ async def loop_start(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -473,24 +632,43 @@ async def loop_start(ctx: Context) -> None:
     player = await voice.player_ctx.get_player()
 
     if player.track:
-        voice.player_ctx.set_queue_push_to_front(player.track)
+        queue_ref = voice.player_ctx.get_queue()
+        queue_ref.push_to_front(player.track)
         if voice.lavalink.data:
             voice.lavalink.data.add(ctx.guild_id)
         else:
             voice.lavalink.data = {ctx.guild_id}
 
         if player.track.info.uri:
+
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.loop_start.starting_loop_url.response").format(
-                    player.track.info.author, player.track.info.title, player.track.info.uri)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.loop_start.starting_loop.response"
+                ).format(
+                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.info.uri,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
         else:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.loop_start.starting_loop_no_url.response").format(
-                    player.track.info.author, player.track.info.title)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.loop_start.starting_loop.response"
+                ).format(
+                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_no_url").format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
     else:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.loop.nothing_playing.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.loop.nothing_playing.response")
+        )
 
 
 # @loop.child hace que /loop end sea un subcomando de loop
@@ -510,7 +688,9 @@ async def loop_end(ctx: Context) -> None:
     voice = ctx.bot.voice.connections.get(ctx.guild_id)
 
     if not voice:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.error.no_voice.response")
+        )
         return None
 
     assert isinstance(voice, LavalinkVoice)
@@ -518,21 +698,39 @@ async def loop_end(ctx: Context) -> None:
     player = await voice.player_ctx.get_player()
 
     if player.track:
-        voice.player_ctx.set_queue_remove(0)
+        queue_ref = voice.player_ctx.get_queue()
+        queue_ref.remove(0)
         if voice.lavalink.data:
             voice.lavalink.data.remove(ctx.guild_id)
         if player.track.info.uri:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.loop_end.ending_loop_url.response").format(
-                    player.track.info.author, player.track.info.title, player.track.info.uri)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.loop_end.ending_loop.response"
+                ).format(
+                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.info.uri,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
         else:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(ctx, "cmd.loop_end.ending_loop_no_url.response").format(
-                    player.track.info.author, player.track.info.title)
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.loop_end.ending_loop.response"
+                ).format(
+                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_no_url").format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
     else:
-        await ctx.respond(ctx.bot.d.localizer.get_text(ctx, "cmd.loop.nothing_playing.response"))
+        await ctx.respond(
+            ctx.bot.d.localizer.get_text(ctx, "cmd.loop.nothing_playing.response")
+        )
 
 
 def load(bot: GatewayBot) -> None:

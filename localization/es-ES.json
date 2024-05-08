@@ -58,5 +58,6 @@
     "event.track_start_no_url.response": "Iniciada de reproducción de `{0} - {1}` | Pedido por <@!{3}>",
     "cmd.queue.queue_text_info_url.response": "{0} -> [`{1} - {2}`](<{3}>), Pedido por <@!{4}>\\n",
     "cmd.queue.queue_text_info_no_url.response": "{0} -> `{1} - {2}`, Pedido por <@!{3}>\\n",
-    "cmd.swap.track_info_url.response": "[`{0} - {1}`](<{2}>), Pedido por <@!{3}>\\n"
+    "cmd.swap.track_info_url.response": "[`{0} - {1}`](<{2}>), Pedido por <@!{3}>",
+    "cmd.swap.track_info_no_url.response": "`{0} - {1}`, Pedido por <@!{3}>"
 }

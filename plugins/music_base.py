@@ -48,19 +48,30 @@ class Events(lavalink_rs.EventHandler):
         if event.track.info.uri:
             await data[1].rest.create_message(
                 data[0],
-                data[1].d.localizer.get_text(data[2], "event.track_start_url.response").format(
-                    event.track.info.author, event.track.info.title, event.track.info.uri,
-                    event.track.user_data['requester_id']),
+                data[1].d.localizer.get_text(data[2], "event.track_start.response").format(
+                    data[1].d.localizer.get_text(data[2], "generic.track_info_url").format(
+                        event.track.info.author,
+                        event.track.info.title,
+                        event.track.info.uri,
+                        event.track.user_data["requester_id"],
+                    )
+                ),
             )
         else:
             await data[1].rest.create_message(
                 data[0],
-                data[1].bot.d.localizer.get_text(data[2], "event.track_start_no_url.response").format(
-                    event.track.info.author, event.track.info.title, event.track.user_data['requester_id']),
+                data[1].d.localizer.get_text(data[2], "event.track_start.response").format(
+                    data[1].d.localizer.get_text(data[2], "generic.track_info_no_url").format(
+                        event.track.info.author,
+                        event.track.info.title,
+                        event.track.user_data["requester_id"],
+                    )
+                ),
             )
 
         if client.data and event.guild_id in client.data:
-            player_ctx.set_queue_push_to_front(event.track)
+            queue_ref = player_ctx.get_queue()
+            queue_ref.push_to_front(event.track)
 
 
 @plugin.listener(hikari.ShardReadyEvent, bind=True)

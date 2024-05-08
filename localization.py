@@ -11,9 +11,7 @@ class Localizer:
     __data: t.Dict[str, t.Dict[str, str]] = {}
     __default: str
 
-    def __init__(
-        self, langs: t.List[str], default: str
-    ):
+    def __init__(self, langs: t.List[str], default: str):
         self.__default = default
 
         for i in langs:
