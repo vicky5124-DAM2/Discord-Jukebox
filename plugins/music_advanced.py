@@ -45,9 +45,7 @@ async def pause(ctx: Context) -> None:
         if player.track.info.uri:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(ctx, "cmd.pause.paused.response").format(
-                    ctx.bot.d.localizer.get_text(
-                        ctx, "generic.track_info_url"
-                    ).format(
+                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
                         player.track.info.author,
                         player.track.info.title,
                         player.track.info.uri,
@@ -108,9 +106,7 @@ async def resume(ctx: Context) -> None:
         if player.track.info.uri:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(ctx, "cmd.resume.resumed.response").format(
-                    ctx.bot.d.localizer.get_text(
-                        ctx, "generic.track_info_url"
-                    ).format(
+                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
                         player.track.info.author,
                         player.track.info.title,
                         player.track.info.uri,
@@ -181,9 +177,7 @@ async def seek(ctx: Context) -> None:
         if player.track.info.uri:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(ctx, "cmd.seek.seeked.response").format(
-                    ctx.bot.d.localizer.get_text(
-                        ctx, "generic.track_info_url"
-                    ).format(
+                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
                         player.track.info.author,
                         player.track.info.title,
                         player.track.info.uri,
@@ -365,12 +359,9 @@ async def remove(ctx: Context) -> None:
     track = queue[ctx.options.index - 1].track
 
     if track.info.uri:
-
         await ctx.respond(
             ctx.bot.d.localizer.get_text(ctx, "cmd.remove.removed.response").format(
-                ctx.bot.d.localizer.get_text(
-                    ctx, "generic.track_info_url"
-                ).format(
+                ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
                     track.info.author,
                     track.info.title,
                     track.info.uri,
@@ -381,9 +372,7 @@ async def remove(ctx: Context) -> None:
     else:
         await ctx.respond(
             ctx.bot.d.localizer.get_text(ctx, "cmd.remove.removed.response").format(
-                ctx.bot.d.localizer.get_text(
-                    ctx, "generic.track_info_no_url"
-                ).format(
+                ctx.bot.d.localizer.get_text(ctx, "generic.track_info_no_url").format(
                     track.info.author,
                     track.info.title,
                     track.user_data["requester_id"],
@@ -635,12 +624,11 @@ async def loop_start(ctx: Context) -> None:
         queue_ref = voice.player_ctx.get_queue()
         queue_ref.push_to_front(player.track)
         if voice.lavalink.data:
-            voice.lavalink.data.add(ctx.guild_id)
+            voice.lavalink.data.add(int(ctx.guild_id))
         else:
-            voice.lavalink.data = {ctx.guild_id}
+            voice.lavalink.data = {int(ctx.guild_id)}
 
         if player.track.info.uri:
-
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(
                     ctx, "cmd.loop_start.starting_loop.response"
@@ -658,7 +646,9 @@ async def loop_start(ctx: Context) -> None:
                 ctx.bot.d.localizer.get_text(
                     ctx, "cmd.loop_start.starting_loop.response"
                 ).format(
-                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_no_url").format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_no_url"
+                    ).format(
                         player.track.info.author,
                         player.track.info.title,
                         player.track.user_data["requester_id"],
@@ -720,7 +710,9 @@ async def loop_end(ctx: Context) -> None:
                 ctx.bot.d.localizer.get_text(
                     ctx, "cmd.loop_end.ending_loop.response"
                 ).format(
-                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_no_url").format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_no_url"
+                    ).format(
                         player.track.info.author,
                         player.track.info.title,
                         player.track.user_data["requester_id"],

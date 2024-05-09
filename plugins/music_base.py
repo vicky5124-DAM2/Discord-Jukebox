@@ -48,8 +48,12 @@ class Events(lavalink_rs.EventHandler):
         if event.track.info.uri:
             await data[1].rest.create_message(
                 data[0],
-                data[1].d.localizer.get_text(data[2], "event.track_start.response").format(
-                    data[1].d.localizer.get_text(data[2], "generic.track_info_url").format(
+                data[1]
+                .d.localizer.get_text(data[2], "event.track_start.response")
+                .format(
+                    data[1]
+                    .d.localizer.get_text(data[2], "generic.track_info_url")
+                    .format(
                         event.track.info.author,
                         event.track.info.title,
                         event.track.info.uri,
@@ -60,8 +64,12 @@ class Events(lavalink_rs.EventHandler):
         else:
             await data[1].rest.create_message(
                 data[0],
-                data[1].d.localizer.get_text(data[2], "event.track_start.response").format(
-                    data[1].d.localizer.get_text(data[2], "generic.track_info_no_url").format(
+                data[1]
+                .d.localizer.get_text(data[2], "event.track_start.response")
+                .format(
+                    data[1]
+                    .d.localizer.get_text(data[2], "generic.track_info_no_url")
+                    .format(
                         event.track.info.author,
                         event.track.info.title,
                         event.track.user_data["requester_id"],
@@ -69,7 +77,7 @@ class Events(lavalink_rs.EventHandler):
                 ),
             )
 
-        if client.data and event.guild_id in client.data:
+        if client.data and event.guild_id.inner in client.data:
             queue_ref = player_ctx.get_queue()
             queue_ref.push_to_front(event.track)
 

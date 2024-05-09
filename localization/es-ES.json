@@ -19,19 +19,47 @@
     "cmd.play.song_already_playing.response": "Ya se está reproduciendo una canción",
     "cmd.play.empty_queue.response": "La cola está vacía",
     "cmd.play.no_found_songs.response": "No se ha encontrado ninguna canción",
+    "cmd.play.yt-dlp.unknown_title": "Titulo desconocido",
+    "cmd.play.yt-dlp.unknown_artist": "Artista desconocido",
+    "cmd.play.url_not_supported": "URL no soportada",
     "cmd.skip.nothing_skip.response": "Nada que saltar",
     "cmd.stop.nothing_stop.response": "Nada que parar",
 
 
-    "cmd.pause.paused_url.response": "Pausado: [`{0} - {1}`](<{2}>)",
-    "cmd.pause.paused_no_url.response": "Pausado: `{0} - {1}`",
-    "cmd.resume.resumed_url.response": "Continuado: [`{0} - {1}`](<{2}>)",
-    "cmd.resume.resumed_no_url.response": "Continuado: `{0} - {1}`",
-    "cmd.seek.seeked_url.response": "Buscado: [`{0} - {1}`](<{2}>)",
-    "cmd.seek.seeked_no_url.response": "Buscado: `{0} - {1}`",
+    "cmd.pause.paused.response": "Pausado: {0}",
+    "cmd.resume.resumed.response": "Continuado: {0}",
+    "cmd.seek.seeked.response": "Buscado: {0}",
     "cmd.queue.now_playing_url.response": "[`{0} - {1}`](<{2}>) | {3} (Segundo {4}), Pedido por <@!{5}>",
     "cmd.queue.now_playing_no_url.response": "`{0} - {1}` | {2} (Segundo {3}), Pedido por <@!{4}>",
     "cmd.queue.now_playing_queue.response": "Reproduciendo ahora: {0}\n\n{1}",
+    "cmd.queue.queue_text_info.response": "{0} -> {1}\\n",
+    "cmd.remove.removed.response": "Removed: {0}",
+    "cmd.swap.swapped.response": "Swapped {0} with {1}",
+    "cmd.loop_start.starting_loop.response": "Starting the loop on track: {0}",
+    "cmd.loop_end.ending_loop.response": "Ending the loop on track: {0}",
+    "cmd.join.channel_id.response": "Joined <#{0}>",
+    "cmd.play.added_to_queue.response": "Added to queue: {0}",
+    "cmd.play.added_playlist_to_queue.response": "Added playlist to queue: `{0}`",
+    "cmd.skip.skipped.response": "Skipped: {0}",
+    "cmd.stop.stopped.response": "Stopped: {0}",
+
+    "event.track_start.response": "Started playing {0}",
+
+    "cmd.error.no_voice.response": "The bot is not connected to a voice channel",
+    "error.response": "Error",
+
+    "generic.track_info_url": "[`{0} - {1}`](<{2}>) | Pedido por <@!{3}>",
+    "generic.track_info_no_url": "`{0} - {1}` | Pedido por <@!{3}>",
+
+
+
+
+
+
+
+
+
+
     "cmd.remove.removed_url.response": "Quitado de la cola: [`{0} - {1}`](<{2}>, Pedido por <@!{4}>)",
     "cmd.remove.removed_no_url.response": "Quitado de la cola: `{0} - {1}`, Pedido por <@!{3}>",
     "cmd.swap.swapped.response": "Intercambiado {0} por {1}",
@@ -47,12 +75,10 @@
     "cmd.skip.skipped_no_url.response": "Saltado: `{0} - {1}`",
     "cmd.stop.stopped_url.response": "Parado: [`{0} - {1}`](<{2}>)",
     "cmd.stop.stopped_no_url.response": "Parado: `{0} - {1}`",
-    "cmd.play.yt-dlp.unknown_title": "Titulo desconocido",
-    "cmd.play.yt-dlp.unknown_artist": "Artista desconocido",
+
 
     "cmd.error.no_voice.response": "No estoy conectado a un canal de voz",
     "error.response": "Error",
-    "cmd.play.url_not_supported": "URL no soportada",
 
     "event.track_start_url.response": "Iniciada la reproducción de [`{0} - {1}`](<{2}>) | Pedido por <@!{3}>",
     "event.track_start_no_url.response": "Iniciada de reproducción de `{0} - {1}` | Pedido por <@!{3}>",

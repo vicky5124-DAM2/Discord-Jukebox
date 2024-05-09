@@ -19,6 +19,9 @@
     "cmd.play.song_already_playing.response": "A song is already playing",
     "cmd.play.empty_queue.response": "The queue is empty",
     "cmd.play.no_found_songs.response": "No songs found",
+    "cmd.play.yt-dlp.unknown_title": "Unknown title",
+    "cmd.play.yt-dlp.unknown_artist": "Unknown artist",
+    "cmd.play.url_not_supported": "URL not supported",
     "cmd.skip.nothing_skip.response": "Nothing to skip",
     "cmd.stop.nothing_stop.response": "Nothing to stop",
 
@@ -29,6 +32,7 @@
     "cmd.queue.now_playing_url.response": "[`{0} - {1}`](<{2}>) | {3} (Second {4}), Requested by <@!{5}>",
     "cmd.queue.now_playing_no_url.response": "`{0} - {1}` | {2} (Second {3}), Requested by <@!{4}>",
     "cmd.queue.now_playing_queue.response": "Now playing: {0}\n\n{1}",
+    "cmd.queue.queue_text_info.response": "{0} -> {1}\\n",
     "cmd.remove.removed.response": "Removed: {0}",
     "cmd.swap.swapped.response": "Swapped {0} with {1}",
     "cmd.loop_start.starting_loop.response": "Starting the loop on track: {0}",
@@ -38,15 +42,11 @@
     "cmd.play.added_playlist_to_queue.response": "Added playlist to queue: `{0}`",
     "cmd.skip.skipped.response": "Skipped: {0}",
     "cmd.stop.stopped.response": "Stopped: {0}",
-    "cmd.play.yt-dlp.unknown_title": "Unknown title",
-    "cmd.play.yt-dlp.unknown_artist": "Unknown artist",
+
+    "event.track_start.response": "Started playing {0}",
 
     "cmd.error.no_voice.response": "The bot is not connected to a voice channel",
     "error.response": "Error",
-    "cmd.play.url_not_supported": "URL not supported",
-
-    "event.track_start.response": "Started playing {0}",
-    "cmd.queue.queue_text_info.response": "{0} -> {1}\\n",
 
     "generic.track_info_url": "[`{0} - {1}`](<{2}>) | Requested by <@!{3}>",
     "generic.track_info_no_url": "`{0} - {1}` | Requested by <@!{3}>"

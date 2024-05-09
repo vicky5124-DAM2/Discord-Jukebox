@@ -249,19 +249,30 @@ async def play(ctx: Context) -> None:
         if loaded_tracks.info.uri:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(
-                    ctx, "cmd.play.added_to_queue_url.response"
+                    ctx, "cmd.play.added_to_queue.response"
                 ).format(
-                    loaded_tracks.info.author,
-                    loaded_tracks.info.title,
-                    loaded_tracks.info.uri,
+                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
+                        loaded_tracks.info.author,
+                        loaded_tracks.info.title,
+                        loaded_tracks.info.uri,
+                        loaded_tracks.user_data["requester_id"],
+                    )
                 )
             )
         # si no, pone el mensaje sin la url
         else:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(
-                    ctx, "cmd.play.added_to_queue_no_url.response"
-                ).format(loaded_tracks.info.author, loaded_tracks.info.title)
+                    ctx, "cmd.play.added_to_queue.response"
+                ).format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_no_url"
+                    ).format(
+                        loaded_tracks.info.author,
+                        loaded_tracks.info.title,
+                        loaded_tracks.user_data["requester_id"],
+                    )
+                )
             )
 
     # Search results
@@ -273,19 +284,30 @@ async def play(ctx: Context) -> None:
         if loaded_tracks[0].info.uri:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(
-                    ctx, "cmd.play.added_to_queue_url.response"
+                    ctx, "cmd.play.added_to_queue.response"
                 ).format(
-                    loaded_tracks[0].info.author,
-                    loaded_tracks[0].info.title,
-                    loaded_tracks[0].info.uri,
+                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
+                        loaded_tracks[0].info.author,
+                        loaded_tracks[0].info.title,
+                        loaded_tracks[0].info.uri,
+                        loaded_tracks[0].user_data["requester_id"],
+                    )
                 )
             )
         # si no, pone el mensaje sin la url
         else:
             await ctx.respond(
                 ctx.bot.d.localizer.get_text(
-                    ctx, "cmd.play.added_to_queue_no_url.response"
-                ).format(loaded_tracks[0].info.author, loaded_tracks[0].info.title)
+                    ctx, "cmd.play.added_to_queue.response"
+                ).format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_no_url"
+                    ).format(
+                        loaded_tracks[0].info.author,
+                        loaded_tracks[0].info.title,
+                        loaded_tracks[0].user_data["requester_id"],
+                    )
+                )
             )
 
     # Playlist
@@ -301,15 +323,32 @@ async def play(ctx: Context) -> None:
             if track.info.uri:
                 await ctx.respond(
                     ctx.bot.d.localizer.get_text(
-                        ctx, "cmd.play.added_to_queue_url.response"
-                    ).format(track.info.author, track.info.title, track.info.uri)
+                        ctx, "cmd.play.added_to_queue.response"
+                    ).format(
+                        ctx.bot.d.localizer.get_text(
+                            ctx, "generic.track_info_url"
+                        ).format(
+                            track.info.author,
+                            track.info.title,
+                            track.info.uri,
+                            track.user_data["requester_id"],
+                        )
+                    )
                 )
             # si no hay url, entonces se pone la información sin la url
             else:
                 await ctx.respond(
                     ctx.bot.d.localizer.get_text(
-                        ctx, "cmd.play.added_to_queue_url.response"
-                    ).format(track.info.author, track.info.title, track.info.uri)
+                        ctx, "cmd.play.added_to_queue.response"
+                    ).format(
+                        ctx.bot.d.localizer.get_text(
+                            ctx, "generic.track_info_no_url"
+                        ).format(
+                            track.info.author,
+                            track.info.title,
+                            track.user_data["requester_id"],
+                        )
+                    )
                 )
         # este else es para cuando se envia el enlace de una playlist
         else:
@@ -395,18 +434,27 @@ async def play_yt_dlp(
     if loaded_tracks.info.uri:
         await ctx.respond(
             ctx.bot.d.localizer.get_text(
-                ctx, "cmd.play.added_to_queue_url.response"
+                ctx, "cmd.play.added_to_queue.response"
             ).format(
-                loaded_tracks.info.author,
-                loaded_tracks.info.title,
-                loaded_tracks.info.uri,
+                ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
+                    loaded_tracks.info.author,
+                    loaded_tracks.info.title,
+                    loaded_tracks.info.uri,
+                    loaded_tracks.user_data["requester_id"],
+                )
             )
         )
     else:
         await ctx.respond(
             ctx.bot.d.localizer.get_text(
-                ctx, "cmd.play.added_to_queue_no_url.response"
-            ).format(loaded_tracks.info.author, loaded_tracks.info.title)
+                ctx, "cmd.play.added_to_queue.response"
+            ).format(
+                ctx.bot.d.localizer.get_text(ctx, "generic.track_info_no_url").format(
+                    loaded_tracks.info.author,
+                    loaded_tracks.info.title,
+                    loaded_tracks.user_data["requester_id"],
+                )
+            )
         )
     # try_play reproduce la canción cuando es la primera vez que usas el comando !play
     await try_play(player_ctx, has_joined)
@@ -457,19 +505,26 @@ async def skip(ctx: Context) -> None:
     if player.track:
         if player.track.info.uri:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(
-                    ctx, "cmd.skip.skipped_url.response"
-                ).format(
-                    player.track.info.author,
-                    player.track.info.title,
-                    player.track.info.uri,
+                ctx.bot.d.localizer.get_text(ctx, "cmd.skip.skipped.response").format(
+                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.info.uri,
+                        player.track.user_data["requester_id"],
+                    )
                 )
             )
         else:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(
-                    ctx, "cmd.skip.skipped_no_url.response"
-                ).format(player.track.info.author, player.track.info.title)
+                ctx.bot.d.localizer.get_text(ctx, "cmd.skip.skipped.response").format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_no_url"
+                    ).format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
         # el bot salta a la siguiente canción en la cola
         voice.player_ctx.skip()
@@ -512,19 +567,26 @@ async def stop(ctx: Context) -> None:
     if player.track:
         if player.track.info.uri:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(
-                    ctx, "cmd.stop.stopped_url.response"
-                ).format(
-                    player.track.info.author,
-                    player.track.info.title,
-                    player.track.info.uri,
+                ctx.bot.d.localizer.get_text(ctx, "cmd.stop.stopped.response").format(
+                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.info.uri,
+                        player.track.user_data["requester_id"],
+                    )
                 )
             )
         else:
             await ctx.respond(
-                ctx.bot.d.localizer.get_text(
-                    ctx, "cmd.stop.stopped_no_url.response"
-                ).format(player.track.info.author, player.track.info.title)
+                ctx.bot.d.localizer.get_text(ctx, "cmd.stop.stopped.response").format(
+                    ctx.bot.d.localizer.get_text(
+                        ctx, "generic.track_info_no_url"
+                    ).format(
+                        player.track.info.author,
+                        player.track.info.title,
+                        player.track.user_data["requester_id"],
+                    )
+                )
             )
         # para la canción
         await voice.player_ctx.stop_now()
