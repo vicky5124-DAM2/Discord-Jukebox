@@ -33,57 +33,21 @@
     "cmd.queue.now_playing_no_url.response": "`{0} - {1}` | {2} (Segundo {3}), Pedido por <@!{4}>",
     "cmd.queue.now_playing_queue.response": "Reproduciendo ahora: {0}\n\n{1}",
     "cmd.queue.queue_text_info.response": "{0} -> {1}\\n",
-    "cmd.remove.removed.response": "Removed: {0}",
-    "cmd.swap.swapped.response": "Swapped {0} with {1}",
-    "cmd.loop_start.starting_loop.response": "Starting the loop on track: {0}",
-    "cmd.loop_end.ending_loop.response": "Ending the loop on track: {0}",
-    "cmd.join.channel_id.response": "Joined <#{0}>",
-    "cmd.play.added_to_queue.response": "Added to queue: {0}",
-    "cmd.play.added_playlist_to_queue.response": "Added playlist to queue: `{0}`",
-    "cmd.skip.skipped.response": "Skipped: {0}",
-    "cmd.stop.stopped.response": "Stopped: {0}",
-
-    "event.track_start.response": "Started playing {0}",
-
-    "cmd.error.no_voice.response": "The bot is not connected to a voice channel",
-    "error.response": "Error",
-
-    "generic.track_info_url": "[`{0} - {1}`](<{2}>) | Pedido por <@!{3}>",
-    "generic.track_info_no_url": "`{0} - {1}` | Pedido por <@!{3}>",
-
-
-
-
-
-
-
-
-
-
-    "cmd.remove.removed_url.response": "Quitado de la cola: [`{0} - {1}`](<{2}>, Pedido por <@!{4}>)",
-    "cmd.remove.removed_no_url.response": "Quitado de la cola: `{0} - {1}`, Pedido por <@!{3}>",
-    "cmd.swap.swapped.response": "Intercambiado {0} por {1}",
-    "cmd.loop_start.starting_loop_url.response": "Iniciando el bucle en la canción: [`{0} - {1}`](<{2}>)",
-    "cmd.loop_start.starting_loop_no_url.response": "Iniciando el bucle en la canción: `{0} - {1}`",
-    "cmd.loop_end.ending_loop_url.response": "Finalizando el bucle en la canción: [`{0} - {1}`](<{2}>)",
-    "cmd.loop_end.ending_loop_no_url.response": "Finalizando el bucle en la canción: `{0} - {1}`",
+    "cmd.remove.removed.response": "Quitado de la cola: {0}",
+    "cmd.swap.swapped.response": "Intercambiado {0} con {1}",
+    "cmd.loop_start.starting_loop.response": "Iniciando el bucle en la canción: {0}",
+    "cmd.loop_end.ending_loop.response": "Finalizando el bucle en la canción: {0}",
     "cmd.join.channel_id.response": "Te has unido a <#{0}>",
-    "cmd.play.added_to_queue_url.response": "Añadido a la cola: [`{0} - {1}`](<{2}>)",
-    "cmd.play.added_to_queue_no_url.response": "Añadido a la cola: `{0} - {1}`",
+    "cmd.play.added_to_queue.response": "Añadido a la cola: {0}",
     "cmd.play.added_playlist_to_queue.response": "Lista de reproducción añadida a la cola: `{0}`",
-    "cmd.skip.skipped_url.response": "Saltado: [`{0} - {1}`](<{2}>)",
-    "cmd.skip.skipped_no_url.response": "Saltado: `{0} - {1}`",
-    "cmd.stop.stopped_url.response": "Parado: [`{0} - {1}`](<{2}>)",
-    "cmd.stop.stopped_no_url.response": "Parado: `{0} - {1}`",
+    "cmd.skip.skipped.response": "Saltado: {0}",
+    "cmd.stop.stopped.response": "Parado: {0}",
 
+    "event.track_start.response": "Iniciada la reproducción de {0}",
 
     "cmd.error.no_voice.response": "No estoy conectado a un canal de voz",
     "error.response": "Error",
 
-    "event.track_start_url.response": "Iniciada la reproducción de [`{0} - {1}`](<{2}>) | Pedido por <@!{3}>",
-    "event.track_start_no_url.response": "Iniciada de reproducción de `{0} - {1}` | Pedido por <@!{3}>",
-    "cmd.queue.queue_text_info_url.response": "{0} -> [`{1} - {2}`](<{3}>), Pedido por <@!{4}>\\n",
-    "cmd.queue.queue_text_info_no_url.response": "{0} -> `{1} - {2}`, Pedido por <@!{3}>\\n",
-    "cmd.swap.track_info_url.response": "[`{0} - {1}`](<{2}>), Pedido por <@!{3}>",
-    "cmd.swap.track_info_no_url.response": "`{0} - {1}`, Pedido por <@!{3}>"
+    "generic.track_info_url": "[`{0} - {1}`](<{2}>) | Pedido por <@!{3}>",
+    "generic.track_info_no_url": "`{0} - {1}` | Pedido por <@!{3}>"
 }
