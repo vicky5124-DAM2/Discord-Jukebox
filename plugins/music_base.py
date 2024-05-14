@@ -45,7 +45,16 @@ class Events(lavalink_rs.EventHandler):
 
         data = player_ctx.data
 
-        if event.track.info.uri:
+        if event.track.user_data.get("title"):
+            title = event.track.user_data["title"]
+            author = event.track.user_data["author"]
+            uri = event.track.user_data["uri"]
+        else:
+            title = event.track.info.title
+            author = event.track.info.author
+            uri = event.track.info.uri
+
+        if uri:
             await data[1].rest.create_message(
                 data[0],
                 data[1]
@@ -54,9 +63,9 @@ class Events(lavalink_rs.EventHandler):
                     data[1]
                     .d.localizer.get_text(data[2], "generic.track_info_url")
                     .format(
-                        event.track.info.author,
-                        event.track.info.title,
-                        event.track.info.uri,
+                        author,
+                        title,
+                        uri,
                         event.track.user_data["requester_id"],
                     )
                 ),
@@ -70,8 +79,8 @@ class Events(lavalink_rs.EventHandler):
                     data[1]
                     .d.localizer.get_text(data[2], "generic.track_info_no_url")
                     .format(
-                        event.track.info.author,
-                        event.track.info.title,
+                        author,
+                        title,
                         event.track.user_data["requester_id"],
                     )
                 ),

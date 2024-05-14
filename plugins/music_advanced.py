@@ -249,13 +249,22 @@ async def queue(ctx: Context) -> None:
         else:
             time = f"{time_m:02}:{time_s:02}"
 
-        if player.track.info.uri:
+        if player.track.user_data.get("title"):
+            title = player.track.user_data["title"]
+            author = player.track.user_data["author"]
+            uri = player.track.user_data["uri"]
+        else:
+            title = player.track.info.title
+            author = player.track.info.author
+            uri = player.track.info.uri
+
+        if uri:
             now_playing = ctx.bot.d.localizer.get_text(
                 ctx, "cmd.queue.now_playing_url.response"
             ).format(
-                player.track.info.author,
-                player.track.info.title,
-                player.track.info.uri,
+                author,
+                title,
+                uri,
                 time,
                 time_true_s,
                 player.track.user_data["requester_id"],
@@ -264,8 +273,8 @@ async def queue(ctx: Context) -> None:
             now_playing = ctx.bot.d.localizer.get_text(
                 ctx, "cmd.queue.now_playing_no_url.response"
             ).format(
-                player.track.info.author,
-                player.track.info.title,
+                author,
+                title,
                 time,
                 time_true_s,
                 player.track.user_data["requester_id"],

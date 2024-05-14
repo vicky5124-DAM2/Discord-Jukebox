@@ -414,7 +414,7 @@ async def play_yt_dlp(
         tracks = await ctx.bot.d.lavalink.load_tracks(ctx.guild_id, valid[-1])
         loaded_tracks = tracks.data
 
-    if tracks.load_type == TrackLoadType.Track:  # tracks is empty
+    if tracks.load_type != TrackLoadType.Track:  # tracks is empty
         raise Exception("Invalid API response")
 
     info = loaded_tracks.info
@@ -428,7 +428,10 @@ async def play_yt_dlp(
     info.uri = ytdl_query.get("original_url")
 
     loaded_tracks.info = info
-    loaded_tracks.user_data = {"requester_id": int(ctx.author.id)}
+    loaded_tracks.user_data = {"requester_id": int(ctx.author.id),
+                               "title": info.title,
+                               "author": info.author,
+                               "uri": info.uri}
     player_ctx.queue(loaded_tracks)
 
     if loaded_tracks.info.uri:
