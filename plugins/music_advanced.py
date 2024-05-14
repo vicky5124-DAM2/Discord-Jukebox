@@ -279,20 +279,17 @@ async def queue(ctx: Context) -> None:
             break
 
         if i.track.info.uri:
-            if player.track is None:
-                queue_text += ""
-            else:
-                queue_text += ctx.bot.d.localizer.get_text(
-                    ctx, "cmd.queue.queue_text_info.response"
-                ).format(
-                    idx + 1,
-                    ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
-                        i.track.info.author,
-                        i.track.info.title,
-                        i.track.info.uri,
-                        player.track.user_data["requester_id"],
-                    ),
-                )
+            queue_text += ctx.bot.d.localizer.get_text(
+                ctx, "cmd.queue.queue_text_info.response"
+            ).format(
+                idx + 1,
+                ctx.bot.d.localizer.get_text(ctx, "generic.track_info_url").format(
+                    i.track.info.author,
+                    i.track.info.title,
+                    i.track.info.uri,
+                    i.track.user_data["requester_id"],
+                ),
+            )
         else:
             queue_text += ctx.bot.d.localizer.get_text(
                 ctx, "cmd.queue.queue_text_info.response"
@@ -301,7 +298,7 @@ async def queue(ctx: Context) -> None:
                 ctx.bot.d.localizer.get_text(ctx, "generic.track_info_no_url").format(
                     i.track.info.author,
                     i.track.info.title,
-                    player.track.user_data["requester_id"],
+                    i.track.user_data["requester_id"],
                 ),
             )
 
