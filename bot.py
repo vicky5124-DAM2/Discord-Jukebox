@@ -11,11 +11,11 @@ load_dotenv()
 bot = lightbulb.BotApp(
     token=os.environ["DISCORD_TOKEN"],
     prefix=os.environ["DISCORD_PREFIX"],
-    default_enabled_guilds=filter(int, os.environ["DEFAULT_ENABLED_GUIDS"].split(',')),
+    default_enabled_guilds=list(filter(int, os.environ["DEFAULT_ENABLED_GUIDS"].split(','))),
     intents=hikari.Intents.ALL_MESSAGES
-    | hikari.Intents.GUILDS
     | hikari.Intents.MESSAGE_CONTENT
     | hikari.Intents.GUILD_VOICE_STATES
+    | hikari.Intents.GUILDS
     | hikari.Intents.GUILD_MEMBERS,
 )
 
