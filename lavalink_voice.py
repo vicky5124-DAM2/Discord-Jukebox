@@ -86,7 +86,7 @@ class LavalinkVoice(VoiceConnection):
     async def notify(self, event: hikari.VoiceEvent) -> None:
         """Submit an event to the voice connection to be processed."""
         if isinstance(event, hikari.VoiceServerUpdateEvent):
-            # Handle the bot being moved frome one channel to another
+            # Handle the bot being moved from one channel to another
             assert event.raw_endpoint
             update_player = UpdatePlayer()
             connection_info = ConnectionInfo(
@@ -94,7 +94,7 @@ class LavalinkVoice(VoiceConnection):
             )
             connection_info.fix()
             update_player.voice = connection_info
-            await self.player.update_player(update_player, True)
+            await self.player_ctx.update_player(update_player, True)
 
     @classmethod
     async def connect(
