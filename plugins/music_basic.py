@@ -195,22 +195,21 @@ async def play(ctx: Context) -> None:
     if not ctx.options.query:
         player = await player_ctx.get_player()
         # si no hay ninguna canción reproduciendose y hay canciones en la cola...
-        if not player.track and await player_ctx.get_queue().get_queue():
+        if not player.track and await player_ctx.get_queue().get_count():
             # el bot hará un /skip para reproducir la siguiente canción
             player_ctx.skip()
+        # si ya hay una canción, entonces el bot pondrá un mensaje
+        elif player.track:
+            await ctx.respond(
+                ctx.bot.d.localizer.get_text(
+                    ctx, "cmd.play.song_already_playing.response"
+                )
+            )
+        # y si no hay ninguna canción en la cola, el bot pondrá otro mensaje
         else:
-            # si ya hay una canción, entonces el bot pondrá un mensaje
-            if player.track:
-                await ctx.respond(
-                    ctx.bot.d.localizer.get_text(
-                        ctx, "cmd.play.song_already_playing.response"
-                    )
-                )
-            # y si no hay ninguna canción en la cola, el bot pondrá otro mensaje
-            else:
-                await ctx.respond(
-                    ctx.bot.d.localizer.get_text(ctx, "cmd.play.empty_queue.response")
-                )
+            await ctx.respond(
+                ctx.bot.d.localizer.get_text(ctx, "cmd.play.empty_queue.response")
+            )
 
         return None
 
